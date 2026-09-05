@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}World index{% endblock %}
+
+{% block body %}
+    <h1>World index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>IsUnlocked</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for world in worlds %}
+            <tr>
+                <td>{{ world.id }}</td>
+                <td>{{ world.isUnlocked ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_world_show', {'id': world.id}) }}">show</a>
+                    <a href="{{ path('app_world_edit', {'id': world.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_world_new') }}">Create new</a>
+{% endblock %}

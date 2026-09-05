@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}WorldData index{% endblock %}
+
+{% block body %}
+    <h1>WorldData index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Number</th>
+                <th>Amount</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for world_datum in world_datas %}
+            <tr>
+                <td>{{ world_datum.id }}</td>
+                <td>{{ world_datum.name }}</td>
+                <td>{{ world_datum.number }}</td>
+                <td>{{ world_datum.amount }}</td>
+                <td>
+                    <a href="{{ path('app_world_data_show', {'id': world_datum.id}) }}">show</a>
+                    <a href="{{ path('app_world_data_edit', {'id': world_datum.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_world_data_new') }}">Create new</a>
+{% endblock %}

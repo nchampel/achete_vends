@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Constant{% endblock %}
+
+{% block body %}
+    <h1>Create new Constant</h1>
+
+    {{ include('constant/_form.html.twig') }}
+
+    <a href="{{ path('app_constant_index') }}">back to list</a>
+{% endblock %}

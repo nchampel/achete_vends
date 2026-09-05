@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Constant{% endblock %}
+
+{% block body %}
+    <h1>Constant</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ constant.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ constant.name }}</td>
+            </tr>
+            <tr>
+                <th>Value</th>
+                <td>{{ constant.value }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_constant_index') }}">back to list</a>
+
+    <a href="{{ path('app_constant_edit', {'id': constant.id}) }}">edit</a>
+
+    {{ include('constant/_delete_form.html.twig') }}
+{% endblock %}

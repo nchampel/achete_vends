@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit World{% endblock %}
+
+{% block body %}
+    <h1>Edit World</h1>
+
+    {{ include('world/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_world_index') }}">back to list</a>
+
+    {{ include('world/_delete_form.html.twig') }}
+{% endblock %}

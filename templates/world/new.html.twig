@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New World{% endblock %}
+
+{% block body %}
+    <h1>Create new World</h1>
+
+    {{ include('world/_form.html.twig') }}
+
+    <a href="{{ path('app_world_index') }}">back to list</a>
+{% endblock %}

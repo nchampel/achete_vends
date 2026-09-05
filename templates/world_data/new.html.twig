@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New WorldData{% endblock %}
+
+{% block body %}
+    <h1>Create new WorldData</h1>
+
+    {{ include('world_data/_form.html.twig') }}
+
+    <a href="{{ path('app_world_data_index') }}">back to list</a>
+{% endblock %}

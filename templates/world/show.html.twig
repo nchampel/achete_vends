@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}World{% endblock %}
+
+{% block body %}
+    <h1>World</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ world.id }}</td>
+            </tr>
+            <tr>
+                <th>IsUnlocked</th>
+                <td>{{ world.isUnlocked ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_world_index') }}">back to list</a>
+
+    <a href="{{ path('app_world_edit', {'id': world.id}) }}">edit</a>
+
+    {{ include('world/_delete_form.html.twig') }}
+{% endblock %}
