@@ -2,29 +2,30 @@
 
 namespace App\Form;
 
-use App\Entity\Item;
+use App\Entity\StockItem;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ItemType extends AbstractType
+class StockItemType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('payPrice')
-            ->add('sellPrice')
-            // ->add('isBuyable')
-            ->add('world')
-            // ->add('createdAt')
+            ->add('finalPayPrice')
+            ->add('finalSellPrice')
+            ->add('isBought')
+            ->add('isSold')
+            ->add('isBuyable')
+            ->add('item')
+            ->add('user')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Item::class,
+            'data_class' => StockItem::class,
         ]);
     }
 }

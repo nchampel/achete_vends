@@ -12,7 +12,7 @@
                 <th>Name</th>
                 <th>PayPrice</th>
                 <th>SellPrice</th>
-                <th>IsBuyable</th>
+                {# <th>IsBuyable</th> #}
                 <th>World</th>
                 <th>CreatedAt</th>
                 <th>actions</th>
@@ -25,7 +25,7 @@
                 <td>{{ item.name }}</td>
                 <td>{{ item.payPrice }}</td>
                 <td>{{ item.sellPrice }}</td>
-                <td>{{ item.isBuyable ? 'Yes' : 'No' }}</td>
+                {# <td>{{ item.isBuyable ? 'Yes' : 'No' }}</td> #}
                 <td>{{ item.world }}</td>
                 <td>{{ item.createdAt ? item.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>

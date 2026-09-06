@@ -35,6 +35,9 @@ class StockItem
     #[ORM\ManyToOne(inversedBy: 'stockItems')]
     private ?User $user = null;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +123,18 @@ class StockItem
     public function setIsBuyable(bool $isBuyable): static
     {
         $this->isBuyable = $isBuyable;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

@@ -30,6 +30,7 @@ class ItemController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $item->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
             $entityManager->persist($item);
             $entityManager->flush();
 
@@ -42,7 +43,7 @@ class ItemController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_item_show', methods: ['GET'])]
+    #[Route('/{id<\d+>}', name: 'app_item_show', methods: ['GET'])]
     public function show(Item $item): Response
     {
         return $this->render('item/show.html.twig', [
@@ -50,7 +51,7 @@ class ItemController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_item_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id<\d+>}/edit', name: 'app_item_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Item $item, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ItemType::class, $item);
@@ -68,7 +69,7 @@ class ItemController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_item_delete', methods: ['POST'])]
+    #[Route('/{id<\d+>}', name: 'app_item_delete', methods: ['POST'])]
     public function delete(Request $request, Item $item, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$item->getId(), $request->request->get('_token'))) {
