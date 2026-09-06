@@ -34,14 +34,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?float $money = 0;
 
-    #[ORM\Column]
-    private ?int $world = 1;
-
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: StockItem::class)]
     private Collection $stockItems;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: World::class, orphanRemoval: true)]
     private Collection $worlds;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?World $currentWorld = null;
 
     public function __construct()
     {
@@ -150,18 +151,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getWorld(): ?int
-    {
-        return $this->world;
-    }
-
-    public function setWorld(int $world): static
-    {
-        $this->world = $world;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, StockItem>
      */
@@ -201,24 +190,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function addWorld(World $world): static
-    {
-        if (!$this->worlds->contains($world)) {
-            $this->worlds->add($world);
-            $world->setUser($this);
-        }
-
-        return $this;
+{
+    if (!$this->worlds->contains($world)) {
+        $this->worlds->add($world);
+        $world->setUser($this);
     }
 
-    public function removeWorld(World $world): static
-    {
-        if ($this->worlds->removeElement($world)) {
-            // set the owning side to null (unless already changed)
-            if ($world->getUser() === $this) {
-                $world->setUser(null);
-            }
-        }
+    return $this;
+}
 
-        return $this;
+public function removeWorld(World $world): static
+{
+    if ($this->worlds->removeElement($world)) {
+        if ($world->getUser() === $this) {
+            $world->setUser(null);
+        }
     }
+
+    if ($this->currentWorld === $world) {
+        $this->currentWorld = null;
+    }
+
+    return $this;
+}
+
+public function getCurrentWorld(): ?World
+{
+    return $this->currentWorld;
+}
+
+public function setCurrentWorld(?World $currentWorld): static
+{
+    $this->currentWorld = $currentWorld;
+
+    return $this;
+}
 }

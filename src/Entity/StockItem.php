@@ -24,13 +24,13 @@ class StockItem
     private ?float $finalSellPrice = null;
 
     #[ORM\Column]
-    private ?bool $isBought = null;
+    private ?bool $isBought = false;
 
     #[ORM\Column]
-    private ?bool $isSold = null;
+    private ?bool $isSold = false;
 
     #[ORM\Column]
-    private ?bool $isBuyable = null;
+    private ?bool $isBuyable = false;
 
     #[ORM\ManyToOne(inversedBy: 'stockItems')]
     private ?User $user = null;

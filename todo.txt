@@ -1,0 +1,2 @@
+déplacer repo au contrôleur de world méthode unlockworld, tester méthode
+créer méthode dans stockitem pour créer les stock item au cron

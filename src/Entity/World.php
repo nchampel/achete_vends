@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use App\Repository\WorldDataRepository;
 use App\Repository\WorldRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: WorldRepository::class)]
@@ -14,15 +16,23 @@ class World
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?bool $isUnlocked = null;
+    private ?bool $isUnlocked = false;
 
     #[ORM\ManyToOne(inversedBy: 'worlds')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+//     #[ORM\ManyToOne(inversedBy: 'worlds')]
+// #[ORM\JoinColumn(nullable: false)]
+// private ?User $user = null;
+
     #[ORM\ManyToOne(inversedBy: 'worlds')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?WorldData $world = null;
+    private ?WorldData $worldData = null;
+
+    // #[ORM\ManyToOne(inversedBy: 'world')]
+    // #[ORM\JoinColumn(nullable: false)]
+    // private ?User $user2 = null;
 
     public function getId(): ?int
     {
@@ -53,15 +63,53 @@ class World
         return $this;
     }
 
-    public function getWorld(): ?WorldData
+    public function getWorldData(): ?WorldData
     {
-        return $this->world;
+        return $this->worldData;
     }
 
-    public function setWorld(?WorldData $world): static
+    public function setWorldData(?WorldData $worldData): static
     {
-        $this->world = $world;
+        $this->worldData = $worldData;
 
         return $this;
     }
+
+    public function unlockWorld(WorldData $world, WorldRepository $repoWorld,  WorldDataRepository $repoData, EntityManagerInterface $entityManager){
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        
+        $currentWorld = $user->getCurrentWorld();
+
+        if (!$currentWorld) {
+            return;
+        }
+
+        $newWorldNumber = $currentWorld->getWorldData()->getNumber() + 1;
+        // $newWorldNumber = $user->getWorlds()[0]->getWorld()->getNumber() + 1;
+        $newWorldData = $repoData->findOneBy(['number' => $newWorldNumber]);
+        if($newWorldData->getAmount() <= $user->getMoney()){
+            $newWorld = $repoWorld->findOneBy(['user' => $user]);
+            $newWorld->setIsUnlocked(true);
+            $entityManager->persist($newWorld);
+
+            $user->setMoney($user->getMoney() - $newWorldData->getAmount());
+            $user->addWorld($newWorld);
+            $entityManager->persist($user);
+
+            $entityManager->flush();
+        }
+    }
+
+    // public function getUser2(): ?User
+    // {
+    //     return $this->user2;
+    // }
+
+    // public function setUser2(?User $user2): static
+    // {
+    //     $this->user2 = $user2;
+
+    //     return $this;
+    // }
 }
