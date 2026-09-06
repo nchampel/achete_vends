@@ -14,7 +14,8 @@ class WorldType extends AbstractType
         $builder
             ->add('isUnlocked')
             ->add('user')
-            ->add('world')
+            ->add('worldData')
+            // ->add('amount')
         ;
     }
 

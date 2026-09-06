@@ -2,9 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\WorldDataRepository;
 use App\Repository\WorldRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: WorldRepository::class)]
@@ -75,31 +73,31 @@ class World
         return $this;
     }
 
-    public function unlockWorld(WorldData $world, WorldRepository $repoWorld,  WorldDataRepository $repoData, EntityManagerInterface $entityManager){
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
+    // public function unlockWorld(WorldData $world, WorldRepository $repoWorld,  WorldDataRepository $repoData, EntityManagerInterface $entityManager){
+    //     /** @var \App\Entity\User $user */
+    //     $user = $this->getUser();
         
-        $currentWorld = $user->getCurrentWorld();
+    //     $currentWorld = $user->getCurrentWorld();
 
-        if (!$currentWorld) {
-            return;
-        }
+    //     if (!$currentWorld) {
+    //         return;
+    //     }
 
-        $newWorldNumber = $currentWorld->getWorldData()->getNumber() + 1;
-        // $newWorldNumber = $user->getWorlds()[0]->getWorld()->getNumber() + 1;
-        $newWorldData = $repoData->findOneBy(['number' => $newWorldNumber]);
-        if($newWorldData->getAmount() <= $user->getMoney()){
-            $newWorld = $repoWorld->findOneBy(['user' => $user]);
-            $newWorld->setIsUnlocked(true);
-            $entityManager->persist($newWorld);
+    //     $newWorldNumber = $currentWorld->getWorldData()->getNumber() + 1;
+    //     // $newWorldNumber = $user->getWorlds()[0]->getWorld()->getNumber() + 1;
+    //     $newWorldData = $repoData->findOneBy(['number' => $newWorldNumber]);
+    //     if($newWorldData->getAmount() <= $user->getMoney()){
+    //         $newWorld = $repoWorld->findOneBy(['user' => $user]);
+    //         $newWorld->setIsUnlocked(true);
+    //         $entityManager->persist($newWorld);
 
-            $user->setMoney($user->getMoney() - $newWorldData->getAmount());
-            $user->addWorld($newWorld);
-            $entityManager->persist($user);
+    //         $user->setMoney($user->getMoney() - $newWorldData->getAmount());
+    //         $user->addWorld($newWorld);
+    //         $entityManager->persist($user);
 
-            $entityManager->flush();
-        }
-    }
+    //         $entityManager->flush();
+    //     }
+    // }
 
     // public function getUser2(): ?User
     // {

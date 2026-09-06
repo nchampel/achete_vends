@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\World;
 use App\Form\WorldType;
 use App\Repository\WorldRepository;
+use App\Service\WorldService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +20,20 @@ class WorldController extends AbstractController
     {
         return $this->render('world/index.html.twig', [
             'worlds' => $worldRepository->findAll(),
+            'user' => $this->getUser()
+        ]);
+    }
+
+    #[Route('/unlock', name: 'app_world_unlock', methods: ['GET'])]
+    public function unlockWorld(WorldRepository $worldRepository, WorldService $service): Response
+    {
+        $service->unlockNextWorld($this->getUser());
+
+        $this->redirectToRoute('app_world_index');
+
+        return $this->render('world/index.html.twig', [
+            'worlds' => $worldRepository->findAll(),
+            'user' => $this->getUser()
         ]);
     }
 
@@ -42,7 +57,7 @@ class WorldController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_world_show', methods: ['GET'])]
+    #[Route('/{id<\d+>}', name: 'app_world_show', methods: ['GET'])]
     public function show(World $world): Response
     {
         return $this->render('world/show.html.twig', [
@@ -50,7 +65,7 @@ class WorldController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_world_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id<\d+>}/edit', name: 'app_world_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, World $world, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(WorldType::class, $world);
@@ -68,7 +83,7 @@ class WorldController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_world_delete', methods: ['POST'])]
+    #[Route('/{id<\d+>}', name: 'app_world_delete', methods: ['POST'])]
     public function delete(Request $request, World $world, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$world->getId(), $request->request->get('_token'))) {

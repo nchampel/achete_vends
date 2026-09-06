@@ -5,11 +5,19 @@
 {% block body %}
     <h1>World index</h1>
 
+    <h1>Bonjour {{ user.pseudo }}!</h1>
+
+    <h2>Argent : {{user.money }} €</h2>
+
+    <h2>Monde {{ user.currentWorld.worldData.name }}</h2>
+
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>IsUnlocked</th>
+                <th>Name</th>
+                <th>Amount</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -18,6 +26,8 @@
             <tr>
                 <td>{{ world.id }}</td>
                 <td>{{ world.isUnlocked ? 'Yes' : 'No' }}</td>
+                <td>{{ world.worldData.name }}</td>
+                <td>{{ world.worldData.amount }} €</td>
                 <td>
                     <a href="{{ path('app_world_show', {'id': world.id}) }}">show</a>
                     <a href="{{ path('app_world_edit', {'id': world.id}) }}">edit</a>
@@ -32,4 +42,5 @@
     </table>
 
     <a href="{{ path('app_world_new') }}">Create new</a>
+    <a href="{{ path('app_world_unlock') }}">Débloquer monde suivant</a>
 {% endblock %}

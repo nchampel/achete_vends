@@ -1,2 +1,5 @@
-déplacer repo au contrôleur de world méthode unlockworld, tester méthode
+déplacer repo au contrôleur de world méthode unlockworld => fait, dans un service
+tester méthode => ok
 créer méthode dans stockitem pour créer les stock item au cron
+acheter amélioration qui augmente quantité de stockitem à chaque réapprovisionnement
+réapproviosennement toutes les 30 min

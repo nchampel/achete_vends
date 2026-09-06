@@ -15,7 +15,7 @@ class ItemType extends AbstractType
             ->add('name')
             ->add('payPrice')
             ->add('sellPrice')
-            ->add('isBuyable')
+            // ->add('isBuyable')
             ->add('world')
             ->add('createdAt')
         ;

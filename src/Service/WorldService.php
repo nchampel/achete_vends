@@ -24,26 +24,26 @@ class WorldService
      *         Le nouveau monde si le déblocage a réussi,
      *         null sinon.
      */
-    public function unlockNextWorld(User $user): ?World
+    public function unlockNextWorld(User $user): void
     {
 
                
         $currentWorld = $user->getCurrentWorld();
 
         if (!$currentWorld) {
-            return null;
+            return;
         }
 
         $newWorldNumber = $currentWorld->getWorldData()->getNumber() + 1;
         // $newWorldNumber = $user->getWorlds()[0]->getWorld()->getNumber() + 1;
         $newWorldData = $this->worldDataRepository->findOneBy(['number' => $newWorldNumber]);
         if($newWorldData->getAmount() <= $user->getMoney()){
-            $newWorld = $this->worldRepository->findOneBy(['user' => $user]);
+            $newWorld = $this->worldRepository->findOneBy(['user' => $user, 'worldData' => $newWorldData]);
             $newWorld->setIsUnlocked(true);
             $this->entityManager->persist($newWorld);
 
             $user->setMoney($user->getMoney() - $newWorldData->getAmount());
-            $user->addWorld($newWorld);
+            // $user->addWorld($newWorld);
             // Ajout du monde à la collection du joueur
             $user->addWorld($newWorld);
             // Le nouveau monde devient le monde courant
@@ -51,9 +51,11 @@ class WorldService
             $this->entityManager->persist($user);
 
             $this->entityManager->flush();
+        } else {
+            // pas assez d'argent
         }
 
-        return $newWorld;
+        // return $newWorld;
 
         // // Récupération du monde actuellement sélectionné
         // $currentWorld = $user->getCurrentWorld();
@@ -117,4 +119,6 @@ class WorldService
 
         // return $newWorld;
     }
+
+    
 }

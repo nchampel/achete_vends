@@ -190,39 +190,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function addWorld(World $world): static
-{
-    if (!$this->worlds->contains($world)) {
-        $this->worlds->add($world);
-        $world->setUser($this);
-    }
-
-    return $this;
-}
-
-public function removeWorld(World $world): static
-{
-    if ($this->worlds->removeElement($world)) {
-        if ($world->getUser() === $this) {
-            $world->setUser(null);
+    {
+        if (!$this->worlds->contains($world)) {
+            $this->worlds->add($world);
+            $world->setUser($this);
         }
+
+        return $this;
     }
 
-    if ($this->currentWorld === $world) {
-        $this->currentWorld = null;
+    public function removeWorld(World $world): static
+    {
+        if ($this->worlds->removeElement($world)) {
+            if ($world->getUser() === $this) {
+                $world->setUser(null);
+            }
+        }
+
+        if ($this->currentWorld === $world) {
+            $this->currentWorld = null;
+        }
+
+        return $this;
     }
 
-    return $this;
-}
+    public function getCurrentWorld(): ?World
+    {
+        return $this->currentWorld;
+    }
 
-public function getCurrentWorld(): ?World
-{
-    return $this->currentWorld;
-}
+    public function setCurrentWorld(?World $currentWorld): static
+    {
+        $this->currentWorld = $currentWorld;
 
-public function setCurrentWorld(?World $currentWorld): static
-{
-    $this->currentWorld = $currentWorld;
+        return $this;
+    }
 
-    return $this;
-}
+    public function __toString(): string
+    {
+        return $this->pseudo ?? '';
+    }
+
 }
