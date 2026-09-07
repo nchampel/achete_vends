@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\StockItem;
+use App\Form\StockItemPriceType;
 use App\Service\ItemService;
 use App\Form\StockItemType;
 use App\Repository\ItemRepository;
@@ -25,54 +26,105 @@ class StockItemController extends AbstractController
         // private WorldRepository $worldRepository,
     ) {
         $this->itemService = $itemService;
+        $this->stockItemRepository = $stockItemRepository;
+        $this->entityManager = $entityManager;
     }
 
     #[Route('/', name: 'app_stock_item_index', methods: ['GET'])]
-    public function index(StockItemRepository $stockItemRepository): Response
+    public function index(): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
         return $this->render('stock_item/index.html.twig', [
             // 'stock_items' => $stockItemRepository->findAll(),
-            'stock_items_user' => $stockItemRepository->findStockItemsOfUserNotSold($this->getUser()),
-            'stock_items_stock' => $stockItemRepository->findStockItemsOfUserNullBuyable(),
+            'stock_items_user' => $this->stockItemRepository->findStockItemsOfUserNotSold($this->getUser()),
+            'stock_items_stock' => $this->stockItemRepository->findStockItemsOfUserNullBuyable(),
             'user' => $this->getUser(),
         ]);
     }
 
     #[Route('/sold', name: 'app_stock_item_sold', methods: ['GET'])]
-    public function sold(StockItemRepository $stockItemRepository): Response
+    public function sold(): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
         return $this->render('stock_item/sold.html.twig', [
             // 'stock_items' => $stockItemRepository->findAll(),
-            'stock_items_user' => $stockItemRepository->findStockItemsOfUserSold($this->getUser()),
+            'stock_items_user' => $this->stockItemRepository->findStockItemsOfUserSold($this->getUser()),
             // 'stock_items_stock' => $stockItemRepository->findStockItemsOfUserNullBuyable(),
             'user' => $this->getUser(),
         ]);
     }
 
+    
     #[Route('/sell/{id<\d+>}', name: 'app_stock_item_sell', methods: ['GET'])]
-    public function sell(StockItemRepository $stockItemRepository, StockItem $stockItem): Response
+    public function sell(StockItem $stockItem): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-        dump($stockItem);
+
+        // dump($stockItem);
         $this->itemService->sellItem($this->getUser(), $stockItem);
         // die();
 
         return $this->render('stock_item/index.html.twig', [
-            'stock_items' => $stockItemRepository->findAll(),
+            // 'stock_items' => $stockItemRepository->findAll(),
+            'stock_items_user' => $this->stockItemRepository->findStockItemsOfUserNotSold($this->getUser()),
+            'stock_items_stock' => $this->stockItemRepository->findStockItemsOfUserNullBuyable(),
+            'user' => $this->getUser(),
+        ]);
+    }
+
+     #[Route('/{id}/price/edit', name: 'app_stock_item_price_edit', methods: ['GET', 'POST'])]
+    public function editPrice(Request $request, StockItem $stockItem): Response
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+        if($stockItem->getId() != $user->getId()){
+            return $this->redirectToRoute('app_stock_item_index');
+        }
+        $form = $this->createForm(StockItemPriceType::class, $stockItem);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('app_stock_item_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('stock_item/editPrice.html.twig', [
+            'stock_item' => $stockItem,
+            'form' => $form,
+        ]);
+    }
+     #[Route('/{id}/buy', name: 'app_stock_item_buy', methods: ['GET', 'POST'])]
+    public function buy(StockItem $stockItem): Response
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+        if($stockItem->getId() != $user->getId()){
+            return $this->redirectToRoute('app_stock_item_index');
+        }
+        $this->itemService->buyItem($user, $stockItem);
+
+        return $this->renderForm('stock_item/index.html.twig', [
+            'stock_items_user' => $this->stockItemRepository->findStockItemsOfUserNotSold($this->getUser()),
+            'stock_items_stock' => $this->stockItemRepository->findStockItemsOfUserNullBuyable(),
             'user' => $this->getUser(),
         ]);
     }
 
     #[Route('/generate/{token}', name: 'app_stock_item_generate', methods: ['GET'])]
-    public function generateCron(StockItemRepository $stockItemRepository, ItemRepository $itemRepository, EntityManagerInterface $entityManager, Request $request, string $token): Response
+    public function generateCron(ItemRepository $itemRepository, Request $request, string $token): Response
     {
         // if ($this->appService->getConfig('maintenance') == "true") {
         //     return $this->redirectToRoute('app_maintenance');
@@ -81,11 +133,11 @@ class StockItemController extends AbstractController
         if ($token == $_ENV['APP_TOKEN_APP']) {
         // on rend inachetable ceux qui n'ont pas été achetés
         /** @var \App\Entity\StockItem[] $outdatedItems */
-        $outdatedItems = $stockItemRepository->findBy(['user' => null]);
+        $outdatedItems = $this->stockItemRepository->findBy(['user' => null]);
             foreach ($outdatedItems as $item) {
 
             $item->setIsBuyable(false);
-            $entityManager->persist($item);
+            $this->entityManager->persist($item);
                 // $entityManager->remove($item);
                 // $entityManager->flush();
             }
@@ -128,31 +180,31 @@ class StockItemController extends AbstractController
                         // $stockItemGenerated->setstockitem($model);
                         $stockItemGenerated->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
                         // $forestResourceGenerated->setType("");
-                        $entityManager->persist($stockItemGenerated);
+                        $this->entityManager->persist($stockItemGenerated);
                     // }
                 }
             }
-            $entityManager->flush();
+            $this->entityManager->flush();
             $this->addFlash('success', "Les nouveaux articles ont été générés");
         }
         return $this->redirect($referer ?? $this->generateUrl('app_stock_item_index'));
         return $this->render('stock_item/index.html.twig', [
-            'stock_items' => $stockItemRepository->findAll(),
+            'stock_items' => $this->stockItemRepository->findAll(),
         ]);
     }
 
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/new', name: 'app_stock_item_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request): Response
     {
         $stockItem = new StockItem();
         $form = $this->createForm(StockItemType::class, $stockItem);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($stockItem);
-            $entityManager->flush();
+            $this->entityManager->persist($stockItem);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('app_stock_item_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -174,13 +226,13 @@ class StockItemController extends AbstractController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/edit', name: 'app_stock_item_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, StockItem $stockItem, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, StockItem $stockItem): Response
     {
         $form = $this->createForm(StockItemType::class, $stockItem);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('app_stock_item_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -193,11 +245,11 @@ class StockItemController extends AbstractController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'app_stock_item_delete', methods: ['POST'])]
-    public function delete(Request $request, StockItem $stockItem, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, StockItem $stockItem): Response
     {
         if ($this->isCsrfTokenValid('delete'.$stockItem->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($stockItem);
-            $entityManager->flush();
+            $this->entityManager->remove($stockItem);
+            $this->entityManager->flush();
         }
 
         return $this->redirectToRoute('app_stock_item_index', [], Response::HTTP_SEE_OTHER);

@@ -8,6 +8,7 @@ use App\Entity\StockItem;
 use App\Repository\ItemRepository;
 use App\Repository\StockItemRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class ItemService
 {
@@ -24,16 +25,17 @@ class ItemService
      * @return void
      *         achat et fixation du prix de vente.
      */
-    public function buyItem(User $user, StockItem $stockItem, float $sellPrice): void
+    public function buyItem(User $user, StockItem $stockItem): void
     {
 
         // $newWorldData = $this->stockItemRepository->findOneBy(['id' => $newWorldNumber]);
         /**  @var \App\Entity\StockItem $stockItem */
         if($stockItem->getFinalPayPrice() <= $user->getMoney()){
             // $stockItem = $this->worldRepository->findOneBy(['user' => $user, 'worldData' => $newWorldData]);
+            
             $stockItem->setIsBought(true);
             $stockItem->setUser($user);
-            $stockItem->setUserSellPrice($sellPrice);
+            $stockItem->setUserSellPrice($stockItem->getFinalSellPrice());
             $stockItem->setBoughtAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
             $this->entityManager->persist($stockItem);
 
@@ -54,17 +56,27 @@ class ItemService
     public function sellItem(User $user, StockItem $stockItem): void
     {
 
+    }
+    /**
+     *Action d'achat ou non par l'IA de l'article, prix mis par joueur.
+     *
+     * @return void
+     *         
+     */
+    public function sellItemAI(User $user, StockItem $stockItem): string
+    {
+
         // $newWorldData = $this->stockItemRepository->findOneBy(['id' => $newWorldNumber]);
         if(!$stockItem->isBought() || !$stockItem->getUser() || $stockItem->isSold()){
-            return;
+            return "erreur dans les paramètres";
         }
         /**  @var \App\Entity\StockItem $stockItem */
         $userSellPrice = $stockItem->getUserSellPrice();
         $sellPrice = $stockItem->getItem()->getSellPrice();
         $percent = 0;
 
-        $userSellPrice = 100;
-        $sellPrice = 100;
+        // $userSellPrice = 100;
+        // $sellPrice = 100;
 
         // on calcule le % positif ou négatif par rapport au prix conseillé
         $differencePercent = ($userSellPrice - $sellPrice) * 100 / $sellPrice;
@@ -100,7 +112,7 @@ class ItemService
 
         $sellNumber = random_int(1, 100);
 
-        dump($sellNumber);
+        // dump($sellNumber);
 
         if($percent > $sellNumber){
             $stockItem->setIsSold(true);
@@ -108,9 +120,13 @@ class ItemService
             $this->entityManager->persist($stockItem);
             $this->entityManager->persist($user);
             $this->entityManager->flush();
+            return "transaction réussie";
         } else {
             // transaction échouée
+            return "transaction échouée";
         }
+
+        // $this->redire
 
         
         // if($stockItem->getFinalPayPrice() <= $user->getMoney()){

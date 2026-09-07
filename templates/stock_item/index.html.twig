@@ -16,6 +16,7 @@
                 <th>Name</th>
                 <th>FinalPayPrice</th>
                 <th>FinalSellPrice</th>
+                <th>UserSellPrice</th>
                 <th>IsBought</th>
                 <th>IsSold</th>
                 <th>IsBuyable</th>
@@ -29,6 +30,7 @@
                 <td>{{ stock_item.item.name }}</td>
                 <td>{{ stock_item.finalPayPrice }}</td>
                 <td>{{ stock_item.finalSellPrice }}</td>
+                <td>{{ stock_item.userSellPrice }}</td>
                 <td>{{ stock_item.isBought ? 'Yes' : 'No' }}</td>
                 <td>{{ stock_item.isSold ? 'Yes' : 'No' }}</td>
                 <td>{{ stock_item.isBuyable ? 'Yes' : 'No' }}</td>
@@ -37,7 +39,7 @@
                         <a href="{{ path('app_stock_item_show', {'id': stock_item.id}) }}">show</a>
                         <a href="{{ path('app_stock_item_edit', {'id': stock_item.id}) }}">edit</a>
                     {% endif %}
-                    <a href="{{ path('app_stock_item_sell', {'id': stock_item.id}) }}">Vendre</a>
+                    <a href="{{ path('app_stock_item_price_edit', {'id': stock_item.id}) }}">Vendre</a>
                 </td>
             </tr>
         {% else %}
@@ -78,7 +80,7 @@
                         <a href="{{ path('app_stock_item_show', {'id': stock_item.id}) }}">show</a>
                         <a href="{{ path('app_stock_item_edit', {'id': stock_item.id}) }}">edit</a>
                     {% endif %}
-                    <a href="{{ path('app_stock_item_sell', {'id': stock_item.id}) }}">Acheter</a>
+                    <a href="{{ path('app_stock_item_price_edit', {'id': stock_item.id}) }}">Acheter</a>
                 </td>
             </tr>
         {% else %}

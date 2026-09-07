@@ -18,4 +18,6 @@ et les routes admin aussi => fait
 mettre role_user où il faut dans twig, route.
 pour les achats, monde, remonter ceux de l'user => fait
 
+tester achat et vente, par appel insomnia app_stock_item_sell
+
 pharmaciemetrolarose.rh@gmail.com
