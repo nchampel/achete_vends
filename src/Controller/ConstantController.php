@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/constant')]
+#[Route('/admin/constant')]
 class ConstantController extends AbstractController
 {
     #[Route('/', name: 'app_constant_index', methods: ['GET'])]

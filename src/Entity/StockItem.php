@@ -38,6 +38,15 @@ class StockItem
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column]
+    private ?float $userSellPrice = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $boughtAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $soldAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -135,6 +144,42 @@ class StockItem
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUserSellPrice(): ?float
+    {
+        return $this->userSellPrice;
+    }
+
+    public function setUserSellPrice(float $userSellPrice): static
+    {
+        $this->userSellPrice = $userSellPrice;
+
+        return $this;
+    }
+
+    public function getBoughtAt(): ?\DateTimeImmutable
+    {
+        return $this->boughtAt;
+    }
+
+    public function setBoughtAt(\DateTimeImmutable $boughtAt): static
+    {
+        $this->boughtAt = $boughtAt;
+
+        return $this;
+    }
+
+    public function getSoldAt(): ?\DateTimeImmutable
+    {
+        return $this->soldAt;
+    }
+
+    public function setSoldAt(?\DateTimeImmutable $soldAt): static
+    {
+        $this->soldAt = $soldAt;
 
         return $this;
     }

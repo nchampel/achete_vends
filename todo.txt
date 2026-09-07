@@ -1,5 +1,21 @@
 déplacer repo au contrôleur de world méthode unlockworld => fait, dans un service
 tester méthode => ok
-créer méthode dans stockitem pour créer les stock item au cron
-acheter amélioration qui augmente quantité de stockitem à chaque réapprovisionnement
+créer méthode dans stockitem pour créer les stock item au cron => fait, mais faut sécuriser avec app_token => fait
+acheter amélioration qui augmente quantité de stockitem à chaque réapprovisionnement => dans stockitemcontroller generateCron
 réapproviosennement toutes les 30 min
+créer fonction pour acheter article => à tester
+créer fonction pour mettre en vente article => test en cours, mais il faut intégrer achat prix voulu, vendre doit envoyer sur un formulaire où l'on voit prix conseillé, prix d'acaht, 
+et le prix qu'on peut entrer, défaut prix conseillé
+créer fonction pour vérifier si article va être acheté
+NE PAS OUBLIER QUE SI USER SELL PRICE A 0, C EST QU AUCUN PRIX N A ETE RENTRE PAR L UTILISATEUR, mettre dans formualire achat le prix voulu de vente, éditable, 
+attention, utilisateur ne peut éditer que usersellprice
+faire maintenance (appcontroller de ibei)
+protéger les routes if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+et les routes admin aussi => fait
+
+mettre role_user où il faut dans twig, route.
+pour les achats, monde, remonter ceux de l'user => fait
+
+pharmaciemetrolarose.rh@gmail.com

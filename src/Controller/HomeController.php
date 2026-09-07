@@ -14,7 +14,7 @@ class HomeController extends AbstractController
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        if(is_null($user)){
+        if(!($user)){
             return $this->redirectToRoute('app_login');
         }
 
