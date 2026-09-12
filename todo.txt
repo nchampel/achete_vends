@@ -47,6 +47,8 @@ sécuriser par rapport à chatgpt sécuriser route cron symfony route generate s
 ex : php /home/o2demo/mon-application-sf/bin/console messenger:consume
 usr/local/bin/php bin/console app:generate-stock
 
+composer require symfony/lock pour command lock
+
 mettre en ligne, créer constant inscription, s'inscrire, me mettre admin après avoir testé un peu le jeu
 
 vérifier qu'on met argent à 0 et monde à 1 lors inscription, => argent ok, voir le monde => ok

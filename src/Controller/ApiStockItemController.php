@@ -22,7 +22,7 @@ class ApiStockItemController extends AbstractController
         // $this->entityManager = $entityManager;
     }
 
-    #[Route('/all', name: 'api_stock_item_stock', methods: ['GET'])]
+    #[Route('/stock/item/all', name: 'api_stock_item_stock', methods: ['GET'])]
     public function stock(): Response|JsonResponse
     {
         // if (!$this->getUser()) {
