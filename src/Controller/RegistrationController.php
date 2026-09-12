@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\World;
 use App\Form\RegistrationFormType;
 use App\Repository\ConstantRepository;
+use App\Repository\WorldDataRepository;
+use App\Repository\WorldRepository;
 use App\Security\AppCustomAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +22,7 @@ class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AppCustomAuthenticator $authenticator, 
-    EntityManagerInterface $entityManager, ConstantRepository $repo): Response
+    EntityManagerInterface $entityManager, ConstantRepository $repo, WorldRepository $worldRepository, WorldDataRepository $wdRepo): Response
     {
         $authorization = $repo->findOneBy(["name" => "inscription"]);
         if(!$authorization){
@@ -30,6 +33,21 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $worlds = $wdRepo->findAll();
+            foreach($worlds as $worldItem){
+                $world = new World();
+                if($worldItem->getNumber() == 1){
+                    $world->setIsUnlocked(1);
+                    
+                } else {
+
+                    $world->setIsUnlocked(0);
+                }
+                $world->setWorldData($worldItem);
+                $world->setUser($user);
+                $entityManager->persist($world);
+            }
+            $world = $worldRepository->findOneBy(["isUnlocked" => 1]);
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -37,6 +55,8 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+            // $user->setCurrentWorld($worldItem);
+            $user->setCurrentWorld($world);
 
             $entityManager->persist($user);
             $entityManager->flush();
