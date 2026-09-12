@@ -12,12 +12,15 @@ security:
 
     firewalls:
 
+        # ============================================================
+        # FICHIERS / OUTILS DE DEVELOPPEMENT
+        # ============================================================
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
         # ============================================================
-        # LOGIN FLUTTER
+        # LOGIN FLUTTER / JWT
         # ============================================================
         api_login:
             pattern: ^/api/login_check$
@@ -60,23 +63,31 @@ security:
                 path: /
                 always_remember_me: true
 
+    # ================================================================
+    # CONTROLE DES ACCES
+    # ================================================================
     access_control:
 
-        # Le login Flutter est public
+        # Login Flutter : accessible sans JWT
         - { path: ^/api/login_check$, roles: PUBLIC_ACCESS }
 
-        # Le reste de l'API nécessite un JWT
+        # Toutes les autres routes API nécessitent un JWT
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
-        # Ton site existant
+        # Site web
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
 
+    # ================================================================
+    # HIERARCHIE DES ROLES
+    # ================================================================
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER
 
-# attention, à remettre
 
+# ================================================================
+# CONFIGURATION DES TESTS
+# ================================================================
 when@test:
     security:
         password_hashers:
