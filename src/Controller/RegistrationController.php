@@ -24,7 +24,7 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AppCustomAuthenticator $authenticator, 
     EntityManagerInterface $entityManager, ConstantRepository $repo, WorldRepository $worldRepository, WorldDataRepository $wdRepo): Response
     {
-        $authorization = $repo->findOneBy(["name" => "inscription"]);
+        $authorization = $repo->findOneBy(["name" => "inscription", "value" => 1]);
         if(!$authorization){
             return $this->redirectToRoute('app_register_error');
         }
