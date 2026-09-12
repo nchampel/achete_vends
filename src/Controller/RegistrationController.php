@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+// use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -33,12 +33,14 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Le monde de départ du nouvel utilisateur
+            $currentWorld = null;
             $worlds = $wdRepo->findAll();
             foreach($worlds as $worldItem){
                 $world = new World();
                 if($worldItem->getNumber() == 1){
                     $world->setIsUnlocked(1);
-                    
+                    $currentWorld = $world;
                 } else {
 
                     $world->setIsUnlocked(0);
@@ -47,7 +49,11 @@ class RegistrationController extends AbstractController
                 $world->setUser($user);
                 $entityManager->persist($world);
             }
-            $world = $worldRepository->findOneBy(["isUnlocked" => 1]);
+            // Vérification 
+            if ($currentWorld === null) { 
+                throw new \RuntimeException('Le WorldData numéro 1 est introuvable.'); 
+            }
+            // $world = $worldRepository->findOneBy(["isUnlocked" => 1]);
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -56,7 +62,7 @@ class RegistrationController extends AbstractController
                 )
             );
             // $user->setCurrentWorld($worldItem);
-            $user->setCurrentWorld($world);
+            $user->setCurrentWorld($currentWorld);
 
             $entityManager->persist($user);
             $entityManager->flush();
