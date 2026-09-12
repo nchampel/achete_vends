@@ -15,7 +15,9 @@
                 {# <th>IsBuyable</th> #}
                 <th>World</th>
                 <th>CreatedAt</th>
-                <th>actions</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th>actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -28,10 +30,12 @@
                 {# <td>{{ item.isBuyable ? 'Yes' : 'No' }}</td> #}
                 <td>{{ item.world }}</td>
                 <td>{{ item.createdAt ? item.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_item_show', {'id': item.id}) }}">show</a>
-                    <a href="{{ path('app_item_edit', {'id': item.id}) }}">edit</a>
-                </td>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        <a href="{{ path('app_item_show', {'id': item.id}) }}">show</a>
+                        <a href="{{ path('app_item_edit', {'id': item.id}) }}">edit</a>
+                    </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>

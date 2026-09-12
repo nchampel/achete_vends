@@ -57,6 +57,17 @@ class StockItemRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    // public function findStockItemsOfUserNullBuyableApi(){
+    //     // expliquer à ia que je veux ttes infos tables du joueur null
+    //     return $this->createQueryBuilder('si')
+    //         ->innerJoin('si.item', 'i')
+    //         ->addSelect('i')
+    //         ->andWhere('si.user is null')
+    //         ->andWhere('si.isBuyable = true')
+    //         ->orderBy('si.id', 'ASC')
+    //         ->getQuery()
+    //         ->getResult();
+    // }
     public function findStockItemsOfStockAndUser(User $user){
         // expliquer à ia que je veux ttes infos tables du joueur et user null
         return $this->createQueryBuilder('si')

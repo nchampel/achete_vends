@@ -13,15 +13,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/world')]
+#[Route('profile//world')]
 class WorldController extends AbstractController
 {
     #[Route('/', name: 'app_world_index', methods: ['GET'])]
     public function index(WorldRepository $worldRepository): Response
     {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
+        // if (!$this->getUser()) {
+        //     return $this->redirectToRoute('app_login');
+        // }
         return $this->render('world/index.html.twig', [
             'worlds' => $worldRepository->findAll(),
             'user' => $this->getUser()
@@ -31,9 +31,9 @@ class WorldController extends AbstractController
     #[Route('/unlock', name: 'app_world_unlock', methods: ['GET'])]
     public function unlockWorld(WorldRepository $worldRepository, WorldService $service): Response
     {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
+        // if (!$this->getUser()) {
+        //     return $this->redirectToRoute('app_login');
+        // }
         $service->unlockNextWorld($this->getUser());
 
         $this->redirectToRoute('app_world_index');

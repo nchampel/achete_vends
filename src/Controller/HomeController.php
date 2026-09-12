@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/profile')]
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
@@ -14,13 +16,17 @@ class HomeController extends AbstractController
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        if(!($user)){
-            return $this->redirectToRoute('app_login');
-        }
+        // dump($user);
+
+        // if(!($user)){
+        //     return $this->redirectToRoute('app_login');
+        // }
 
         return $this->render('home/index.html.twig', [
             // 'controller_name' => 'HomeController',
-            'user' => $user,
+            // 'user' => $user->getProfileData(),
+            'user' => $user
         ]);
     }
+    
 }

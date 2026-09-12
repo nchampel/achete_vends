@@ -62,7 +62,9 @@
                 <th>IsBought</th>
                 <th>IsSold</th>
                 <th>IsBuyable</th>
-                <th>actions</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th>actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -75,13 +77,15 @@
                 <td>{{ stock_item.isBought ? 'Yes' : 'No' }}</td>
                 <td>{{ stock_item.isSold ? 'Yes' : 'No' }}</td>
                 <td>{{ stock_item.isBuyable ? 'Yes' : 'No' }}</td>
-                <td>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('app_stock_item_show', {'id': stock_item.id}) }}">show</a>
-                        <a href="{{ path('app_stock_item_edit', {'id': stock_item.id}) }}">edit</a>
-                    {% endif %}
-                    <a href="{{ path('app_stock_item_price_edit', {'id': stock_item.id}) }}">Acheter</a>
-                </td>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('app_stock_item_show', {'id': stock_item.id}) }}">show</a>
+                            <a href="{{ path('app_stock_item_edit', {'id': stock_item.id}) }}">edit</a>
+                        {% endif %}
+                        <a href="{{ path('app_stock_item_price_edit', {'id': stock_item.id}) }}">Acheter</a>
+                    </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>

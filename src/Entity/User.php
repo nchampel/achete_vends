@@ -231,4 +231,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->pseudo ?? '';
     }
 
+    public function getProfileData(): array
+    {
+        return [
+            'pseudo' => $this->getPseudo(),
+            'money' => $this->getMoney(),
+            'world_number' => $this->getCurrentWorld()->getId(),
+            'world_name' => $this->getCurrentWorld()->getWorldData()->getName(),
+        ];
+    }
+
 }

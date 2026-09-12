@@ -12,15 +12,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/world/data')]
+#[Route('/profile/world/data')]
 class WorldDataController extends AbstractController
 {
     #[Route('/', name: 'app_world_data_index', methods: ['GET'])]
     public function index(WorldDataRepository $worldDataRepository): Response
     {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
+        // if (!$this->getUser()) {
+        //     return $this->redirectToRoute('app_login');
+        // }
         return $this->render('world_data/index.html.twig', [
             'world_datas' => $worldDataRepository->findAll(),
         ]);
@@ -50,9 +50,9 @@ class WorldDataController extends AbstractController
     #[Route('/{id}', name: 'app_world_data_show', methods: ['GET'])]
     public function show(WorldData $worldDatum): Response
     {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
+        // if (!$this->getUser()) {
+        //     return $this->redirectToRoute('app_login');
+        // }
         return $this->render('world_data/show.html.twig', [
             'world_datum' => $worldDatum,
         ]);

@@ -12,7 +12,9 @@
                 <th>Name</th>
                 <th>Number</th>
                 <th>Amount</th>
-                <th>actions</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th>actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -22,10 +24,12 @@
                 <td>{{ world_datum.name }}</td>
                 <td>{{ world_datum.number }}</td>
                 <td>{{ world_datum.amount }}</td>
-                <td>
-                    <a href="{{ path('app_world_data_show', {'id': world_datum.id}) }}">show</a>
-                    <a href="{{ path('app_world_data_edit', {'id': world_datum.id}) }}">edit</a>
-                </td>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        <a href="{{ path('app_world_data_show', {'id': world_datum.id}) }}">show</a>
+                        <a href="{{ path('app_world_data_edit', {'id': world_datum.id}) }}">edit</a>
+                    </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>
