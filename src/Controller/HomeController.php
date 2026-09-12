@@ -7,10 +7,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/profile')]
+
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
+    #[Route('/', name: 'app_home_symfony')]
+    public function home(): Response
+    {
+        return $this->redirectToRoute('app_login');
+    }
+
+    #[Route('/profile', name: 'app_home')]
     public function index(): Response
     {
         /** @var \App\Entity\User $user */
