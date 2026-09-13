@@ -236,7 +236,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return [
             'pseudo' => $this->getPseudo(),
             'money' => $this->getMoney(),
-            'world_number' => $this->getCurrentWorld()->getId(),
+            'world_number' => $this->getCurrentWorld()->getWorldData()->getId(),
             'world_name' => $this->getCurrentWorld()->getWorldData()->getName(),
         ];
     }
