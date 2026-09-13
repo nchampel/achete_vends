@@ -70,13 +70,13 @@ class ApiUserController extends AbstractController
             return $this->json(['status_code' => 403, 'message' => "Inscription interdite par l'administrateur"], 403);
         }
 
-        if ($request->isMethod('GET')) {
-        return $this->json([
-            'message' => 'Method Not Allowed',
-        ], 405, [
-            'Allow' => 'POST',
-        ]);
-    }
+        // if ($request->isMethod('GET')) {
+        //     return $this->json([
+        //         'message' => 'Method Not Allowed',
+        //     ], 405, [
+        //         'Allow' => 'POST',
+        //     ]);
+        // }
 
         // Récupération du JSON envoyé par Flutter
         $data = json_decode($request->getContent(), true);
