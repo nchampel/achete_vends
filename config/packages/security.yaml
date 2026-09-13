@@ -68,6 +68,9 @@ security:
     # ================================================================
     access_control:
 
+        # Inscription Flutter : accessible sans authentification
+        - { path: ^/register$, roles: PUBLIC_ACCESS }
+
         # Login Flutter : accessible sans JWT
         - { path: ^/api/login_check$, roles: PUBLIC_ACCESS }
 
