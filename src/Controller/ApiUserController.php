@@ -60,7 +60,7 @@ class ApiUserController extends AbstractController
         // }
 
     }
-    #[Route('/register', name: 'api_register', methods: ['POST'])]
+    #[Route('/register', name: 'api_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AppCustomAuthenticator $authenticator, 
     EntityManagerInterface $entityManager, ConstantRepository $repo, WorldRepository $worldRepository, WorldDataRepository $wdRepo, JWTTokenManagerInterface $JWTManager): JsonResponse
     {
