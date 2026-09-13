@@ -20,7 +20,7 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/register', name: 'app_register')]
+    #[Route('/app/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AppCustomAuthenticator $authenticator, 
     EntityManagerInterface $entityManager, ConstantRepository $repo, WorldRepository $worldRepository, WorldDataRepository $wdRepo): Response
     {
