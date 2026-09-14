@@ -22,10 +22,10 @@ class ItemService
     /**
      * Achat par le joueur d'un article.
      *
-     * @return void
-     *         achat et fixation du prix de vente.
+     * @return string
+     *         achat d'un article.
      */
-    public function buyItem(User $user, StockItem $stockItem): void
+    public function buyItem(User $user, StockItem $stockItem): string
     {
 
         // $newWorldData = $this->stockItemRepository->findOneBy(['id' => $newWorldNumber]);
@@ -43,9 +43,30 @@ class ItemService
             $this->entityManager->persist($user);
 
             $this->entityManager->flush();
+            return "Achat effectué";
         } else {
             // pas assez d'argent
+            return "Pas assez d'argent";
         }
+    }
+    /**
+     * Fixation par le joueur du prix d'un article.
+     *
+     * @return string
+     *         fixation du prix de vente.
+     */
+    public function setPriceItem(User $user, StockItem $stockItem, float $price): string
+    {
+
+        // $newWorldData = $this->stockItemRepository->findOneBy(['id' => $newWorldNumber]);
+        /**  @var \App\Entity\StockItem $stockItem */
+        
+        $stockItem->setUserSellPrice($price);
+        $this->entityManager->persist($stockItem);
+
+        $this->entityManager->flush();
+        return "Prix enregistré";
+       
     }
     /**
      *Mise en vente par le joueur d'un article.

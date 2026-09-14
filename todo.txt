@@ -1,6 +1,6 @@
-déplacer repo au contrôleur de world méthode unlockworld => fait, dans un service
-tester méthode => ok
-créer méthode dans stockitem pour créer les stock item au cron => fait, mais faut sécuriser avec app_token => fait
+ok déplacer repo au contrôleur de world méthode unlockworld => fait, dans un service
+ok tester méthode => ok
+ok créer méthode dans stockitem pour créer les stock item au cron => fait, mais faut sécuriser avec app_token => fait
 acheter amélioration qui augmente quantité de stockitem à chaque réapprovisionnement => dans stockitemcontroller generateCron
 réapproviosennement toutes les 30 min
 créer fonction pour acheter article => à tester
@@ -15,7 +15,7 @@ protéger les routes if (!$user) {
         }
 et les routes admin aussi => fait
 
-mettre role_user où il faut dans twig, route.
+mettre role_user où il faut dans twig, route. => protégé par security.yaml
 pour les achats, monde, remonter ceux de l'user => fait
 
 tester achat et vente, modification prix, par appel insomnia app_stock_item_sell
@@ -38,19 +38,25 @@ faire mdp oublié avec clef fournie par serveur
 
 récupérer ici la valeur de la quantité améliorée dans croncontroller
 
-register avec constante inscription à vérifier => fait
+ok register avec constante inscription à vérifier => fait
 
-.env https://siextra.fr dans flutter
+ok .env https://siextra.fr dans flutter => fait
 
-sécuriser par rapport à chatgpt sécuriser route cron symfony route generate stock item (command) => ok
+ok sécuriser par rapport à chatgpt sécuriser route cron symfony route generate stock item (command) => ok
 
 ex : php /home/o2demo/mon-application-sf/bin/console messenger:consume
 usr/local/bin/php bin/console app:generate-stock
 
 composer require symfony/lock pour command lock
 
-mettre en ligne, créer constant inscription, s'inscrire, me mettre admin après avoir testé un peu le jeu
+ok mettre en ligne, créer constant inscription, s'inscrire, me mettre admin après avoir testé un peu le jeu => ok
 
-vérifier qu'on met argent à 0 et monde à 1 lors inscription, => argent ok, voir le monde => ok
+ok vérifier qu'on met argent à 0 et monde à 1 lors inscription, => argent ok, voir le monde => ok
 
-désactiver route old/test.php
+ok désactiver route old/test.php => fait
+
+alors j'ai pensé ramasser bois dans la forêt, 12 pour faire un tas de bois
+
+
+faire app_world_data_index (normalement que vérifier le lien)
+faire app_world_players_index faire le index et mettre user pseudo dans le tableau (comme stock-item)

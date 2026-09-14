@@ -14,5 +14,14 @@
     <h2>Argent : {{user.money }} €</h2>
 
     <h2>Monde {{ user.currentWorld.worldData.name }}</h2>
+
+    {% if is_granted('ROLE_ADMIN') %}
+
+        <a href="{{ path('app_world_players_index') }}">monde</a>
+        <a href="{{ path('app_world_data_index') }}">données monde</a>
+        <a href="{{ path('app_item_index') }}">article</a>
+        <a href="{{ path('app_constant_index') }}">constante</a>
+        <a href="{{ path('app_stock_item_all_index') }}">article en stock et de joueurs</a>
+    {% endif %}
 </div>
 {% endblock %}

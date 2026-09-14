@@ -89,6 +89,7 @@ class StockItemController extends AbstractController
         //     return $this->redirectToRoute('app_login');
         // }
         if($stockItem->getId() != $user->getId()){
+            // attention, à adapter pour flutter et idem pour fixation du prix
             return $this->redirectToRoute('app_stock_item_index');
         }
         $form = $this->createForm(StockItemPriceType::class, $stockItem);
@@ -97,8 +98,21 @@ class StockItemController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
+            $message = "Prix enregistré";
+    
+            return $this->json(["message" => $message, 
+                "stockItem" => 
+                    $stockItem
+                    // [
+                    //     "price" => $stockItem->getUserSellPrice(),
+                    //     "id" => 
+                    // ]
+                ]);
             return $this->redirectToRoute('app_stock_item_index', [], Response::HTTP_SEE_OTHER);
+        } else {
+            return $this->json(["message" => "erreur lors de l'enregistrement du prix"]);
         }
+
 
         return $this->renderForm('stock_item/editPrice.html.twig', [
             'stock_item' => $stockItem,
@@ -114,9 +128,51 @@ class StockItemController extends AbstractController
         //     return $this->redirectToRoute('app_login');
         // }
         if($stockItem->getId() != $user->getId()){
+            // attention, à adapter pour flutter et idem pour fixation du prix
             return $this->redirectToRoute('app_stock_item_index');
         }
-        $this->itemService->buyItem($user, $stockItem);
+        $message = $this->itemService->buyItem($user, $stockItem);
+
+        return $this->json(["message" => $message, 
+            "stockItem" => 
+                $stockItem
+                // [
+                //     "price" => $stockItem->getUserSellPrice(),
+                //     "id" => 
+                // ]
+            ]);
+
+        return $this->renderForm('stock_item/index.html.twig', [
+            'stock_items_user' => $this->stockItemRepository->findStockItemsOfUserNotSold($this->getUser()),
+            'stock_items_stock' => $this->stockItemRepository->findStockItemsOfUserNullBuyable(),
+            'user' => $this->getUser(),
+        ]);
+    }
+
+    #[Route('/{id<\d+>}/set/price', name: 'app_stock_item_set_price', methods: ['GET', 'POST'])]
+    public function setPrice(StockItem $stockItem): Response
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        // if (!$user) {
+        //     return $this->redirectToRoute('app_login');
+        // }
+        // on récupère le prix par le form
+        if($stockItem->getId() != $user->getId()){
+            // attention, à adapter pour flutter et idem pour fixation du prix
+            return $this->redirectToRoute('app_stock_item_index');
+        }
+        $message = "à coder";
+        // $message = $this->itemService->setPriceItem($user, $stockItem, $price);
+
+        return $this->json(["message" => $message, 
+            "stockItem" => 
+                $stockItem
+                // [
+                //     "price" => $stockItem->getUserSellPrice(),
+                //     "id" => 
+                // ]
+            ]);
 
         return $this->renderForm('stock_item/index.html.twig', [
             'stock_items_user' => $this->stockItemRepository->findStockItemsOfUserNotSold($this->getUser()),

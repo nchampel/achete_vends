@@ -34,6 +34,26 @@ class StockItemRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function findStockItemsOfAllUsersNotSold(){
+        return $this->createQueryBuilder('si')
+            ->innerJoin('si.item', 'i')
+            ->addSelect('i')
+            ->andWhere('si.user IS NOT NULL')
+            ->andWhere('si.isSold = false') 
+            ->orderBy('si.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+    public function findStockItemsOfAllUsersSold(){
+        return $this->createQueryBuilder('si')
+            ->innerJoin('si.item', 'i')
+            ->addSelect('i')
+            ->andWhere('si.user IS NOT NULL')
+            ->andWhere('si.isSold = true') 
+            ->orderBy('si.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
     public function findStockItemsOfUserSold(User $user){
         // expliquer à ia que je veux ttes infos tables du joueur
         return $this->createQueryBuilder('si')
