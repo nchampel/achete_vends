@@ -22,7 +22,7 @@ class WorldDataController extends AbstractController
         //     return $this->redirectToRoute('app_login');
         // }
         return $this->render('world_data/index.html.twig', [
-            'world_datas' => $worldDataRepository->findAll(),
+            'world_datas' => $worldDataRepository->findBy(['user' => $this->getUser()]),
         ]);
     }
 

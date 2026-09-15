@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('profile//world')]
+#[Route('profile/world')]
 class WorldController extends AbstractController
 {
     #[Route('/', name: 'app_world_index', methods: ['GET'])]
@@ -23,7 +23,8 @@ class WorldController extends AbstractController
         //     return $this->redirectToRoute('app_login');
         // }
         return $this->render('world/index.html.twig', [
-            'worlds' => $worldRepository->findAll(),
+            // 'worlds' => $worldRepository->findAll(),
+            'worlds' => $worldRepository->findBy(['user' => $this->getUser()]),
             'user' => $this->getUser()
         ]);
     }
