@@ -47,6 +47,15 @@ class StockItem
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $soldAt = null;
 
+    #[ORM\Column]
+    private ?bool $isAnalysed = false;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $analysedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $number = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -180,6 +189,42 @@ class StockItem
     public function setSoldAt(?\DateTimeImmutable $soldAt): static
     {
         $this->soldAt = $soldAt;
+
+        return $this;
+    }
+
+    public function isAnalysed(): ?bool
+    {
+        return $this->isAnalysed;
+    }
+
+    public function setIsAnalysed(bool $isAnalysed): static
+    {
+        $this->isAnalysed = $isAnalysed;
+
+        return $this;
+    }
+
+    public function getAnalysedAt(): ?\DateTimeImmutable
+    {
+        return $this->analysedAt;
+    }
+
+    public function setAnalysedAt(\DateTimeImmutable $analysedAt): static
+    {
+        $this->analysedAt = $analysedAt;
+
+        return $this;
+    }
+
+    public function getNumber(): ?int
+    {
+        return $this->number;
+    }
+
+    public function setNumber(?int $number): static
+    {
+        $this->number = $number;
 
         return $this;
     }

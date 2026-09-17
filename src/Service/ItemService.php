@@ -27,27 +27,124 @@ class ItemService
      */
     public function buyItem(User $user, StockItem $stockItem): string
     {
+        // stockitem null ou pas achetable
+        $this->entityManager->beginTransaction();
+
+        try {
+            /**  @var \App\Entity\StockItem $stockItem */
+            $stockItem = $this->stockItemRepository->findForUpdate($stockItem->getId());
+
+            if ($stockItem === null) {
+                throw new \RuntimeException('Article introuvable');
+            }
+
+            // On vérifie l'état APRÈS avoir obtenu le verrou.
+        if (
+            $stockItem->getUser() !== null
+            || !$stockItem->isBuyable()
+            || $stockItem->isBought()
+        ) {
+            throw new \RuntimeException(
+                'Article déjà acheté ou indisponible ou null'
+            );
+        }
+
+        if ($stockItem->getFinalPayPrice() > $user->getMoney()) {
+            throw new \RuntimeException(
+                "Pas assez d'argent"
+            );
+        }
+
 
         // $newWorldData = $this->stockItemRepository->findOneBy(['id' => $newWorldNumber]);
-        /**  @var \App\Entity\StockItem $stockItem */
-        if($stockItem->getFinalPayPrice() <= $user->getMoney()){
+        
             // $stockItem = $this->worldRepository->findOneBy(['user' => $user, 'worldData' => $newWorldData]);
             
-            $stockItem->setIsBought(true);
-            $stockItem->setUser($user);
-            $stockItem->setUserSellPrice($stockItem->getFinalSellPrice());
-            $stockItem->setBoughtAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
-            $this->entityManager->persist($stockItem);
+        $stockItem->setIsBought(true);
+        $stockItem->setUser($user);
+        // $stockItem->setUserSellPrice($stockItem->getFinalSellPrice()); pas bon car on doit analyser avant
+        $stockItem->setUserSellPrice($stockItem->getFinalPayPrice());
+        $stockItem->setBoughtAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+        // on met le numéro d'achat, qui est incrémenté par la fonction du repo
+        $number = $this->stockItemRepository->findMaxNumberByUser($user);
+        $stockItem->setNumber($number + 1);
+        $this->entityManager->persist($stockItem);
 
-            $user->setMoney($user->getMoney() - $stockItem->getFinalPayPrice());
-            $this->entityManager->persist($user);
+        $user->setMoney($user->getMoney() - $stockItem->getFinalPayPrice());
+        $this->entityManager->persist($user);
 
-            $this->entityManager->flush();
-            return "Achat effectué";
-        } else {
-            // pas assez d'argent
-            return "Pas assez d'argent";
+        $this->entityManager->flush();
+        // IMPORTANT
+        $this->entityManager->commit();
+        return "Achat effectué";
+
+
+        } catch (\Throwable $e) {
+            $this->entityManager->rollback();
+
+            throw $e;
         }
+        
+    }
+    /**
+     * Analyse par le joueur d'un article.
+     *
+     * @return string
+     *         analyse d'un article.
+     */
+    public function analyseItem(User $user, StockItem $stockItem): string
+    {
+        // stockitem null ou pas achetable
+        $this->entityManager->beginTransaction();
+
+        try {
+            /**  @var \App\Entity\StockItem $stockItem */
+            $stockItem = $this->stockItemRepository->findForUpdate($stockItem->getId());
+
+            if ($stockItem === null) {
+                throw new \RuntimeException('Article introuvable');
+            }
+
+            // On vérifie l'état APRÈS avoir obtenu le verrou.
+        if (
+            is_null($stockItem->getUser())
+            // || !$stockItem->isBuyable()
+            || !$stockItem->isBought()
+        ) {
+            throw new \RuntimeException(
+                'Article déjà acheté ou indisponible ou null => analyse'
+            );
+        }
+
+        // if ($stockItem->getFinalPayPrice() > $user->getMoney()) {
+        //     throw new \RuntimeException(
+        //         "Pas assez d'argent"
+        //     );
+        // }
+
+
+        // $newWorldData = $this->stockItemRepository->findOneBy(['id' => $newWorldNumber]);
+        
+            // $stockItem = $this->worldRepository->findOneBy(['user' => $user, 'worldData' => $newWorldData]);
+            
+        $stockItem->setIsBought(true);
+        $stockItem->setUser($user);
+        // $stockItem->setUserSellPrice($stockItem->getFinalSellPrice()); pas bon car on doit analyser avant
+        $stockItem->setUserSellPrice($stockItem->getFinalPayPrice());
+        $stockItem->setBoughtAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+        $this->entityManager->persist($stockItem);
+
+        $user->setMoney($user->getMoney() - $stockItem->getFinalPayPrice());
+        $this->entityManager->persist($user);
+
+        $this->entityManager->flush();
+        return "Analyse effectuée";
+        } catch (\Throwable $e) {
+            $this->entityManager->rollback();
+
+            throw $e;
+        }
+        
     }
     /**
      * Fixation par le joueur du prix d'un article.

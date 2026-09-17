@@ -83,7 +83,8 @@
                             <a href="{{ path('app_stock_item_show', {'id': stock_item.id}) }}">show</a>
                             <a href="{{ path('app_stock_item_edit', {'id': stock_item.id}) }}">edit</a>
                         {% endif %}
-                        <a href="{{ path('app_stock_item_price_edit', {'id': stock_item.id}) }}">Acheter</a>
+                        <a href="{{ path('app_stock_item_buy', {'id': stock_item.id}) }}">Acheter</a>
+                        <a href="{{ path('app_stock_item_price_edit', {'id': stock_item.id}) }}">Éditer</a>
                     </td>
                 {% endif %}
             </tr>

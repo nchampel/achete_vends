@@ -58,5 +58,35 @@ ok désactiver route old/test.php => fait
 alors j'ai pensé ramasser bois dans la forêt, 12 pour faire un tas de bois
 
 
-faire app_world_data_index (normalement que vérifier le lien)
-faire app_world_players_index faire le index et mettre user pseudo dans le tableau (comme stock-item)
+ok faire app_world_data_index (normalement que vérifier le lien)
+ok faire app_world_players_index faire le index et mettre user pseudo dans le tableau (comme stock-item)
+
+j'ai pensé faire construction ville, au début maison, ferme, puis carrière, puis caserne, puis mur, puis autre bâtiment militaires, puis château
+pas plusieurs villes, une seule, mais idée de débloquage d'autres marchandises car ville croît (avec bâtiment, arrivée de nouveaux villageois) => cf ia progression urbaine et conception jeu mobile
+
+chaque jour : récupérer taxes, petits jeux sous forme de quêtes pour avoir des pièces d'or, achat puis vente avec bénéfice
+
+idée de collection d'objet luxueux qui augmentent les taxes ? => probabilité que ce soit vendu au marché
+
+on commence on peut acheter tas de bois, fruits, et on peut les récolter
+tout cela peut être revendu après analyse qu'on fait soi même. si on analyse (qui prend 5 min) on ne peut pas faire autre chose (comme mini quête rapportant quelques pièces d'or)
+ensuite on peut vendre en fixant un prix, la réussite de la transaction dépend d'une probabilité et de la différence avec le prix trouvé par l'analyse
+on peut acheter des améliorations qui va proposer plus d'articles et une probabilité de meilleure qualité ou payer des personnes pour faire analyse à notre place par ex, ça nous permet de faire autre chose
+avec l'argent on va lancer construction d'une maison, en plusieurs étapes (cela revient à payer un constructeur). quand fini des habitants s'installent et on peut récolter taxes par heure
+quête proposée limite dans le temps rapportant plus d'argent que simple vente, et surtout 100% de réussite mais "grosse quantité" à fournir
+"xp" sur nombre quêtes remplies qui augmentent renommée et donne bonus
+craft pour revendre plus cher => j'ai peur que ce soit trop compliqué
+événement pour gagner plus de ressources, vendre plus cher, prix d'achat plus bas
+fluctuation des prix de vente des acheteurs régulier (pas que dans event) pour "forcer" à suivre la transaction, comme je faisais sur wakfu ?
+je rajouterai caserne et autre bâtiment militaires à construire (comme la maison) et recrutement par argent de soldats pour défendre contre pillards d'or et de stock d'objets
+=> probabilité de vol d'un objet et d'une petite somme d'or, diminuée par nombre de soldats. traçage des tentatives avec résultat
+attaque possible toutes les 6h
+cf idée gameplay mobile, qui contient idée de simulation de 1000 joueurs sur 30j
+
+ #[Route('/generate/stock/item/{token}', name: 'app_stock_item_generate', methods: ['GET'])] à désactiver après vu Cathy
+
+ faire boutons analyser et vendre
+ faire 2e card stockitem, renommer la 1ere
+ faire fonction analyse (temps + révélation du prix recommandé) => fonction en cours, entité mise à jour et migrée, mais pas en ligne
+ faire correction analysed, bouton + sur argent en flutter, analyseStartedAt à implémenter
+ constante temps d'analyse, ou carrément table avec niveaux

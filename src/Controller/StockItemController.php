@@ -88,7 +88,7 @@ class StockItemController extends AbstractController
         // if (!$user) {
         //     return $this->redirectToRoute('app_login');
         // }
-        if($stockItem->getId() != $user->getId()){
+        if($stockItem->getUser()->getId() != $user->getId()){
             // attention, à adapter pour flutter et idem pour fixation du prix
             return $this->redirectToRoute('app_stock_item_index');
         }
@@ -119,35 +119,7 @@ class StockItemController extends AbstractController
             'form' => $form,
         ]);
     }
-     #[Route('/{id<\d+>}/buy', name: 'app_stock_item_buy', methods: ['GET', 'POST'])]
-    public function buy(StockItem $stockItem): Response
-    {
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
-        // if (!$user) {
-        //     return $this->redirectToRoute('app_login');
-        // }
-        if($stockItem->getId() != $user->getId()){
-            // attention, à adapter pour flutter et idem pour fixation du prix
-            return $this->redirectToRoute('app_stock_item_index');
-        }
-        $message = $this->itemService->buyItem($user, $stockItem);
-
-        return $this->json(["message" => $message, 
-            "stockItem" => 
-                $stockItem
-                // [
-                //     "price" => $stockItem->getUserSellPrice(),
-                //     "id" => 
-                // ]
-            ]);
-
-        return $this->renderForm('stock_item/index.html.twig', [
-            'stock_items_user' => $this->stockItemRepository->findStockItemsOfUserNotSold($this->getUser()),
-            'stock_items_stock' => $this->stockItemRepository->findStockItemsOfUserNullBuyable(),
-            'user' => $this->getUser(),
-        ]);
-    }
+    
 
     #[Route('/{id<\d+>}/set/price', name: 'app_stock_item_set_price', methods: ['GET', 'POST'])]
     public function setPrice(StockItem $stockItem): Response

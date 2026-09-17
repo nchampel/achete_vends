@@ -6,6 +6,7 @@ use App\Entity\StockItem;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\DBAL\LockMode;
 
 /**
  * @extends ServiceEntityRepository<StockItem>
@@ -77,6 +78,18 @@ class StockItemRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findMaxNumberByUser(User $user): ?int
+    {
+        $result = $this->createQueryBuilder('si')
+            ->select('MAX(si.number)')
+            ->andWhere('si.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $result !== null ? (int) $result : 0;
+    }
     // public function findStockItemsOfUserNullBuyableApi(){
     //     // expliquer à ia que je veux ttes infos tables du joueur null
     //     return $this->createQueryBuilder('si')
@@ -99,6 +112,14 @@ class StockItemRepository extends ServiceEntityRepository
             ->orderBy('si.id', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findForUpdate(int $id): ?StockItem
+    {
+        return $this->find(
+            $id,
+            LockMode::PESSIMISTIC_WRITE
+        );
     }
 
 //    /**
