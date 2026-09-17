@@ -45,6 +45,17 @@ class StockItemRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function findStockItemsOfAllUsersNotSoldAndPendingSale(){
+        return $this->createQueryBuilder('si')
+            ->innerJoin('si.item', 'i')
+            ->addSelect('i')
+            ->andWhere('si.user IS NOT NULL')
+            ->andWhere('si.isSold = false') 
+            ->andWhere('si.isPendingSale = true') 
+            ->orderBy('si.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
     public function findStockItemsOfAllUsersSold(){
         return $this->createQueryBuilder('si')
             ->innerJoin('si.item', 'i')

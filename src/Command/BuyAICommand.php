@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\StockGeneratorService;
+use App\Service\BuyAIService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,7 +17,7 @@ use Symfony\Component\Lock\Store\FlockStore;
 class BuyAICommand extends Command
 {
     public function __construct(
-        private StockGeneratorService $stockGenerator,
+        private BuyAIService $buyAI,
     ) {
         parent::__construct();
     }
@@ -29,7 +29,7 @@ class BuyAICommand extends Command
         $store = new FlockStore('/tmp');
         $lockFactory = new LockFactory($store);
 
-        $lock = $lockFactory->createLock('app-generate-stock', 299);
+        $lock = $lockFactory->createLock('app-buy-AI', 299);
 
         if (!$lock->acquire()) {
             $output->writeln('Le traitement est déjà en cours.');
@@ -38,11 +38,11 @@ class BuyAICommand extends Command
         }
 
         try {
-            $output->writeln('Début de la génération du stock...');
+            $output->writeln('Début du processus d\'achat...');
 
-            $this->stockGenerator->generate();
+            $this->buyAI->buy();
 
-            $output->writeln('Génération terminée.');
+            $output->writeln('Processus d\'achat terminé.');
 
             return Command::SUCCESS;
         } finally {

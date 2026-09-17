@@ -216,6 +216,7 @@ class ItemService
      *Action d'achat ou non par l'IA de l'article, prix mis par joueur.
      *
      * @return void
+     * pas utilisée, cf BuyAIService
      *         
      */
     public function buyItemAI(User $user, StockItem $stockItem): string
