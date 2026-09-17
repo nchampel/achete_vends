@@ -90,3 +90,5 @@ cf idée gameplay mobile, qui contient idée de simulation de 1000 joueurs sur 3
  faire fonction analyse (temps + révélation du prix recommandé) => fonction en cours, entité mise à jour et migrée, mais pas en ligne
  faire correction analysed, bouton + sur argent en flutter, analyseStartedAt à implémenter
  constante temps d'analyse, ou carrément table avec niveaux
+
+ important !!!!!!!!!!!!!!!!!!! corriger analyseItem, la valeur ne doit être connue par flutter que quand on a analysé, pas avant, arranger le temps (là pas en bdd)

@@ -108,11 +108,12 @@ class ItemService
             // On vérifie l'état APRÈS avoir obtenu le verrou.
         if (
             is_null($stockItem->getUser())
-            // || !$stockItem->isBuyable()
+            || $stockItem->isSold()
             || !$stockItem->isBought()
+            || $stockItem->isAnalysed()
         ) {
             throw new \RuntimeException(
-                'Article déjà acheté ou indisponible ou null => analyse'
+                'Article déjà acheté ou vendu ou pas acheté => analyse'
             );
         }
 
@@ -126,18 +127,18 @@ class ItemService
         // $newWorldData = $this->stockItemRepository->findOneBy(['id' => $newWorldNumber]);
         
             // $stockItem = $this->worldRepository->findOneBy(['user' => $user, 'worldData' => $newWorldData]);
+
+            // sleep(5);
+
+            // return "Analyse effectuée";
             
-        $stockItem->setIsBought(true);
-        $stockItem->setUser($user);
+        $stockItem->setIsAnalysed(true);
         // $stockItem->setUserSellPrice($stockItem->getFinalSellPrice()); pas bon car on doit analyser avant
-        $stockItem->setUserSellPrice($stockItem->getFinalPayPrice());
-        $stockItem->setBoughtAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+        $stockItem->setAnalysedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
         $this->entityManager->persist($stockItem);
 
-        $user->setMoney($user->getMoney() - $stockItem->getFinalPayPrice());
-        $this->entityManager->persist($user);
-
         $this->entityManager->flush();
+        $this->entityManager->commit();
         return "Analyse effectuée";
         } catch (\Throwable $e) {
             $this->entityManager->rollback();

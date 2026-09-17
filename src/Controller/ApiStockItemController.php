@@ -34,14 +34,15 @@ class ApiStockItemController extends AbstractController
         /** @var \App\Entity\StockItem[] $stockItems*/
             $stockItems = $this->stockItemRepository->findStockItemsOfUserNullBuyable();
             $stockItemsData = [];
-            foreach ($stockItems as $si){
+            foreach ($stockItems as $stockItem){
                 $stockItemsData[] = [
-                    "final_pay_price" => $si->getFinalPayPrice(), 
-                    "user_sell_price" => $si->getUserSellPrice(), 
-                    "final_sell_price" => $si->getFinalSellPrice(), 
-                    "name" => $si->getItem()->getName(), 
-                    "id" => $si->getId(),
-                    "number" => $si->getNumber(),
+                    "final_pay_price" => $stockItem->getFinalPayPrice(), 
+                    "user_sell_price" => $stockItem->getUserSellPrice(), 
+                    "final_sell_price" => $stockItem->getFinalSellPrice(), 
+                    "name" => $stockItem->getItem()->getName(), 
+                    "id" => $stockItem->getId(),
+                    "number" => $stockItem->getNumber(),
+                    'isAnalysed' => $stockItem->isAnalysed(),
                 ];
             }
             return $this->json([
@@ -81,14 +82,15 @@ class ApiStockItemController extends AbstractController
         /** @var \App\Entity\StockItem[] $stockItems*/
             $stockItems = $this->stockItemRepository->findStockItemsOfAllUsersNotSold();
             $stockItemsData = [];
-            foreach ($stockItems as $si){
+            foreach ($stockItems as $stockItem){
                 $stockItemsData[] = [
-                    "final_pay_price" => $si->getFinalPayPrice(), 
-                    "user_sell_price" => $si->getUserSellPrice(), 
-                    "final_sell_price" => $si->getFinalSellPrice(), 
-                    "name" => $si->getItem()->getName(), 
-                    "id" => $si->getId(), 
-                    "number" => $si->getNumber(),
+                    "final_pay_price" => $stockItem->getFinalPayPrice(), 
+                    "user_sell_price" => $stockItem->getUserSellPrice(), 
+                    "final_sell_price" => $stockItem->getFinalSellPrice(), 
+                    "name" => $stockItem->getItem()->getName(), 
+                    "id" => $stockItem->getId(), 
+                    "number" => $stockItem->getNumber(),
+                    'isAnalysed' => $stockItem->isAnalysed(),
                 ];
             }
             return $this->json([
@@ -133,6 +135,7 @@ class ApiStockItemController extends AbstractController
                     "name" => $stockItem->getItem()->getName(), 
                     'id' => $stockItem->getId(),
                     'number' => $stockItem->getNumber(),
+                    'isAnalysed' => $stockItem->isAnalysed(),
                 ],
                 'user' => $user->getProfileData(),
             ]);
@@ -149,7 +152,7 @@ class ApiStockItemController extends AbstractController
         ]);
     }
 
-    #[Route('/stock/item/{id<\d+>}/analyse', name: 'app_stock_item_analyse', methods: ['POST'])]
+    #[Route('/stock/item/{id<\d+>}/analyse', name: 'app_stock_item_analyse', methods: ['GET'])]
     public function analyse(StockItem $stockItem): Response
     {
         // dump("acheter");
@@ -173,8 +176,15 @@ class ApiStockItemController extends AbstractController
                 $stockItem
             );
 
+            $result = false;
+
+            if($message == "Analyse effectuée"){
+                $result = true;
+            }
+
             return $this->json([
                 'message' => $message,
+                'result' => $result,
                 'stockItem' => [
                     "final_pay_price" => $stockItem->getFinalPayPrice(), 
                     "user_sell_price" => $stockItem->getUserSellPrice(), 
@@ -183,12 +193,14 @@ class ApiStockItemController extends AbstractController
                     "name" => $stockItem->getItem()->getName(), 
                     'id' => $stockItem->getId(),
                     'number' => $stockItem->getNumber(),
+                    'isAnalysed' => $stockItem->isAnalysed(),
                 ],
-                'user' => $user->getProfileData(),
+                // 'user' => $user->getProfileData(),
             ]);
         } catch (\RuntimeException $e) {
             return $this->json([
                 'message' => $e->getMessage(),
+                'result' => false,
             ], 409);
         }
 
