@@ -56,6 +56,12 @@ class StockItem
     #[ORM\Column(nullable: true)]
     private ?int $number = null;
 
+    #[ORM\Column]
+    private ?bool $isPendingSale = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $pendingSaleAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -225,6 +231,30 @@ class StockItem
     public function setNumber(?int $number): static
     {
         $this->number = $number;
+
+        return $this;
+    }
+
+    public function isPendingSale(): ?bool
+    {
+        return $this->isPendingSale;
+    }
+
+    public function setIsPendingSale(bool $isPendingSale): static
+    {
+        $this->isPendingSale = $isPendingSale;
+
+        return $this;
+    }
+
+    public function getPendingSaleAt(): ?\DateTimeImmutable
+    {
+        return $this->pendingSaleAt;
+    }
+
+    public function setPendingSaleAt(\DateTimeImmutable $pendingSaleAt): static
+    {
+        $this->pendingSaleAt = $pendingSaleAt;
 
         return $this;
     }

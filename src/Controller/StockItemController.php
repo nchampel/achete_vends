@@ -61,26 +61,7 @@ class StockItemController extends AbstractController
     }
 
     
-    #[Route('/sell/{id<\d+>}', name: 'app_stock_item_sell', methods: ['GET'])]
-    public function sell(StockItem $stockItem): Response
-    {
-        // if (!$this->getUser()) {
-        //     return $this->redirectToRoute('app_login');
-        // }
-
-        // dump($stockItem);
-        $this->itemService->sellItem($this->getUser(), $stockItem);
-        // die();
-
-        return $this->render('stock_item/index.html.twig', [
-            // 'stock_items' => $stockItemRepository->findAll(),
-            'stock_items_user' => $this->stockItemRepository->findStockItemsOfUserNotSold($this->getUser()),
-            'stock_items_stock' => $this->stockItemRepository->findStockItemsOfUserNullBuyable(),
-            'user' => $this->getUser(),
-        ]);
-    }
-
-     #[Route('/{id<\d+>}/price/edit', name: 'app_stock_item_price_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id<\d+>}/price/edit', name: 'app_stock_item_price_edit', methods: ['GET', 'POST'])]
     public function editPrice(Request $request, StockItem $stockItem): Response
     {
         /** @var \App\Entity\User $user */

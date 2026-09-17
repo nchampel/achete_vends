@@ -7,6 +7,7 @@ use App\Repository\StockItemRepository;
 use App\Service\ItemService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -38,11 +39,14 @@ class ApiStockItemController extends AbstractController
                 $stockItemsData[] = [
                     "final_pay_price" => $stockItem->getFinalPayPrice(), 
                     "user_sell_price" => $stockItem->getUserSellPrice(), 
-                    "final_sell_price" => $stockItem->getFinalSellPrice(), 
+                    "final_sell_price" => null, 
+                    // "final_sell_price" => $stockItem->getFinalSellPrice(), 
                     "name" => $stockItem->getItem()->getName(), 
                     "id" => $stockItem->getId(),
                     "number" => $stockItem->getNumber(),
                     'isAnalysed' => $stockItem->isAnalysed(),
+                    'isPendingSale' => $stockItem->isPendingSale(),
+                    'isSold' => $stockItem->isSold(),
                 ];
             }
             return $this->json([
@@ -91,6 +95,8 @@ class ApiStockItemController extends AbstractController
                     "id" => $stockItem->getId(), 
                     "number" => $stockItem->getNumber(),
                     'isAnalysed' => $stockItem->isAnalysed(),
+                    'isPendingSale' => $stockItem->isPendingSale(),
+                    'isSold' => $stockItem->isSold(),
                 ];
             }
             return $this->json([
@@ -136,6 +142,8 @@ class ApiStockItemController extends AbstractController
                     'id' => $stockItem->getId(),
                     'number' => $stockItem->getNumber(),
                     'isAnalysed' => $stockItem->isAnalysed(),
+                    'isPendingSale' => $stockItem->isPendingSale(),
+                    'isSold' => $stockItem->isSold(),
                 ],
                 'user' => $user->getProfileData(),
             ]);
@@ -152,7 +160,7 @@ class ApiStockItemController extends AbstractController
         ]);
     }
 
-    #[Route('/stock/item/{id<\d+>}/analyse', name: 'app_stock_item_analyse', methods: ['GET'])]
+     #[Route('/stock/item/{id<\d+>}/analyse', name: 'app_stock_item_analyse', methods: ['GET'])]
     public function analyse(StockItem $stockItem): Response
     {
         // dump("acheter");
@@ -170,21 +178,22 @@ class ApiStockItemController extends AbstractController
         //     // return $this->redirectToRoute('app_stock_item_index');
         // }
 
+
         try {
             $message = $this->itemService->analyseItem(
                 $user,
-                $stockItem
+                $stockItem,
             );
 
-            $result = false;
+            // $result = false;
 
-            if($message == "Analyse effectuée"){
-                $result = true;
-            }
+            // if($message == "Analyse effectuée"){
+            //     $result = true;
+            // }
 
             return $this->json([
                 'message' => $message,
-                'result' => $result,
+                // 'result' => $result,
                 'stockItem' => [
                     "final_pay_price" => $stockItem->getFinalPayPrice(), 
                     "user_sell_price" => $stockItem->getUserSellPrice(), 
@@ -194,20 +203,81 @@ class ApiStockItemController extends AbstractController
                     'id' => $stockItem->getId(),
                     'number' => $stockItem->getNumber(),
                     'isAnalysed' => $stockItem->isAnalysed(),
+                    'isPendingSale' => $stockItem->isPendingSale(),
+                    'isSold' => $stockItem->isSold(),
                 ],
                 // 'user' => $user->getProfileData(),
             ]);
         } catch (\RuntimeException $e) {
             return $this->json([
                 'message' => $e->getMessage(),
-                'result' => false,
+                // 'result' => false,
             ], 409);
         }
 
-        return $this->renderForm('stock_item/index.html.twig', [
-            'stock_items_user' => $this->stockItemRepository->findStockItemsOfUserNotSold($this->getUser()),
-            'stock_items_stock' => $this->stockItemRepository->findStockItemsOfUserNullBuyable(),
-            'user' => $this->getUser(),
-        ]);
+    }
+
+    #[Route('/stock/item/{id<\d+>}/sell', name: 'app_stock_item_sell', methods: ['POST'])]
+    public function sell(StockItem $stockItem, Request $request): Response
+    {
+        // dump("acheter");
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        // if (!$user) {
+        //     return $this->redirectToRoute('app_login');
+        // }
+        // if(!is_null($stockItem->getUser()) || !$stockItem->isBuyable() || $stockItem->isBought()){
+        //     // attention, à adapter pour flutter et idem pour fixation du prix
+        //     dump("stockitem null ou pas achetable");
+        //     return $this->json([
+        //         'message' => 'stockitem null ou pas achetable',
+        //     ], 409);
+        //     // return $this->redirectToRoute('app_stock_item_index');
+        // }
+
+        $data = $request->toArray();
+
+        $userSellPrice = $data['userSellPrice'] ?? null;
+        // return $this->json([
+        //     'userSellPrice' => $userSellPrice
+        // ]);
+
+        try {
+            $message = $this->itemService->sellItem(
+                $user,
+                $stockItem,
+                $userSellPrice,
+            );
+
+            // $result = false;
+
+            // if($message == "Analyse effectuée"){
+            //     $result = true;
+            // }
+
+            return $this->json([
+                'message' => $message,
+                // 'result' => $result,
+                'stockItem' => [
+                    "final_pay_price" => $stockItem->getFinalPayPrice(), 
+                    "user_sell_price" => $stockItem->getUserSellPrice(), 
+                    "final_sell_price" => $stockItem->getFinalSellPrice(), 
+                    'price' => $stockItem->getUserSellPrice(),
+                    "name" => $stockItem->getItem()->getName(), 
+                    'id' => $stockItem->getId(),
+                    'number' => $stockItem->getNumber(),
+                    'isAnalysed' => $stockItem->isAnalysed(),
+                    'isPendingSale' => $stockItem->isPendingSale(),
+                    'isSold' => $stockItem->isSold(),
+                ],
+                // 'user' => $user->getProfileData(),
+            ]);
+        } catch (\RuntimeException $e) {
+            return $this->json([
+                'message' => $e->getMessage(),
+                // 'result' => false,
+            ], 409);
+        }
+
     }
 }

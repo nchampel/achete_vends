@@ -128,7 +128,7 @@ class ItemService
         
             // $stockItem = $this->worldRepository->findOneBy(['user' => $user, 'worldData' => $newWorldData]);
 
-            // sleep(5);
+            sleep(5);
 
             // return "Analyse effectuée";
             
@@ -169,12 +169,48 @@ class ItemService
     /**
      *Mise en vente par le joueur d'un article.
      *
-     * @return void
+     * @return String
      *         mise en vente au prix de vente fixé par le joueur.
      */
-    public function sellItem(User $user, StockItem $stockItem): void
+    public function sellItem(User $user, StockItem $stockItem, float $userSellPrice): string
     {
+        $this->entityManager->beginTransaction();
 
+        try {
+            /**  @var \App\Entity\StockItem $stockItem */
+            $stockItem = $this->stockItemRepository->findForUpdate($stockItem->getId());
+
+            if ($stockItem === null) {
+                throw new \RuntimeException('Article introuvable');
+            }
+
+            // On vérifie l'état APRÈS avoir obtenu le verrou.
+        if (
+            is_null($stockItem->getUser())
+            || $stockItem->isSold()
+            || !$stockItem->isBought()
+            || $stockItem->isPendingSale()
+        ) {
+            throw new \RuntimeException(
+                'Article déjà en vente ou vendu ou pas acheté => vente'
+            );
+        }
+
+            
+        $stockItem->setIsPendingSale(true);
+        $stockItem->setUserSellPrice($userSellPrice);
+        // $stockItem->setUserSellPrice($stockItem->getFinalSellPrice()); pas bon car on doit analyser avant
+        $stockItem->setPendingSaleAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+        $this->entityManager->persist($stockItem);
+
+        $this->entityManager->flush();
+        $this->entityManager->commit();
+        return "Demande de vente enregistrée";
+        } catch (\Throwable $e) {
+            $this->entityManager->rollback();
+
+            throw $e;
+        }
     }
     /**
      *Action d'achat ou non par l'IA de l'article, prix mis par joueur.
@@ -182,7 +218,7 @@ class ItemService
      * @return void
      *         
      */
-    public function sellItemAI(User $user, StockItem $stockItem): string
+    public function buyItemAI(User $user, StockItem $stockItem): string
     {
 
         // $newWorldData = $this->stockItemRepository->findOneBy(['id' => $newWorldNumber]);

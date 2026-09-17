@@ -92,3 +92,6 @@ cf idée gameplay mobile, qui contient idée de simulation de 1000 joueurs sur 3
  constante temps d'analyse, ou carrément table avec niveaux
 
  important !!!!!!!!!!!!!!!!!!! corriger analyseItem, la valeur ne doit être connue par flutter que quand on a analysé, pas avant, arranger le temps (là pas en bdd)
+ et aussi vérif pas en ispedningsale pour buyitem, analyseitem
+
+vente en corus flutter => mettre la somme voulue, bouton annuler et éditer la somme de vente
