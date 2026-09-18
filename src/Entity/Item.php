@@ -33,6 +33,9 @@ class Item
     #[ORM\OneToMany(mappedBy: 'item', targetEntity: StockItem::class, orphanRemoval: true)]
     private Collection $stockItems;
 
+    #[ORM\Column(length: 50)]
+    private ?string $url = null;
+
     public function __construct()
     {
         $this->stockItems = new ArrayCollection();
@@ -136,5 +139,17 @@ class Item
     public function __toString(): string
     {
         return $this->name ?? '';
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(string $url): static
+    {
+        $this->url = $url;
+
+        return $this;
     }
 }

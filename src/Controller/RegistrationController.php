@@ -53,6 +53,8 @@ class RegistrationController extends AbstractController
             if ($currentWorld === null) { 
                 throw new \RuntimeException('Le WorldData numéro 1 est introuvable.'); 
             }
+            // argent de départ
+            $user->setMoney(100);
             // $world = $worldRepository->findOneBy(["isUnlocked" => 1]);
             // encode the plain password
             $user->setPassword(

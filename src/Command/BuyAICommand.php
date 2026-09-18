@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Service\BuyAIService;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,6 +19,7 @@ class BuyAICommand extends Command
 {
     public function __construct(
         private BuyAIService $buyAI,
+        private LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -38,6 +40,7 @@ class BuyAICommand extends Command
         }
 
         try {
+            $this->logger->info('Début de app:buy-AI');
             $output->writeln('Début du processus d\'achat...');
 
             $this->buyAI->buy();

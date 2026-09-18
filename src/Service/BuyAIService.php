@@ -78,6 +78,7 @@ class BuyAIService
             if($percent > $sellNumber){
                 $stockItem->setIsSold(true);
                 $stockItem->setSoldAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+                $stockItem->setIsPendingSale(false);
                 $user->setMoney($user->getMoney() + $stockItem->getUserSellPrice());
                 $this->entityManager->persist($stockItem);
                 $this->entityManager->persist($user);

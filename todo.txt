@@ -95,3 +95,11 @@ cf idée gameplay mobile, qui contient idée de simulation de 1000 joueurs sur 3
  et aussi vérif pas en ispedningsale pour buyitem, analyseitem
 
 vente en corus flutter => mettre la somme voulue, bouton annuler et éditer la somme de vente
+
+en flutter, regarder comment à partir de l'appel cron mettre à jour flutter s'il y a vente
+
+command dans .env
+
+ok commande achat en ligne => testé 
+
+faire url dans item
