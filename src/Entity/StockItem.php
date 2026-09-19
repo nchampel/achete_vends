@@ -59,7 +59,7 @@ class StockItem
     #[ORM\Column]
     private ?bool $isPendingSale = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $pendingSaleAt = null;
 
     public function getId(): ?int
