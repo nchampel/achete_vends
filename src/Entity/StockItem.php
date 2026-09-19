@@ -50,7 +50,7 @@ class StockItem
     #[ORM\Column]
     private ?bool $isAnalysed = false;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $analysedAt = null;
 
     #[ORM\Column(nullable: true)]

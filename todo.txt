@@ -103,3 +103,5 @@ command dans .env
 ok commande achat en ligne => testé 
 
 faire url dans item
+
+faire des beaux log avec date h:m:s pour les commands, et srutout vivrer les logs des commands de dev.log
