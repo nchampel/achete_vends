@@ -105,3 +105,6 @@ ok commande achat en ligne => testé
 faire url dans item
 
 faire des beaux log avec date h:m:s pour les commands, et srutout vivrer les logs des commands de dev.log
+
+ static Future<User> buyStockItem(int id) async {
+    String url = '$baseUrl/api/stock/item/$id/buy'; il faut faire remonter sotckitem aussi car création number
