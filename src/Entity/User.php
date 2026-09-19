@@ -32,7 +32,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column]
-    private ?float $money = 0;
+    private ?float $money = 100;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: StockItem::class)]
     private Collection $stockItems;
