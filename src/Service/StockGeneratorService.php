@@ -43,6 +43,7 @@ class StockGeneratorService
                         $stockItemGenerated->setIsBuyable(true);
                         $stockItemGenerated->setIsSold(false);
                         $stockItemGenerated->setUserSellPrice(0);
+                        $stockItemGenerated->setIsPendingSale(0);
                         // $priceModel = $model->getPrice();
                         // $cooldownModel = $model->getCooldown();
                         // $stockItemGenerated->setFinalPayPrice(random_int(round($payPriceModel * 0.8, 2), round($payPriceModel * 1.2, 2)));
