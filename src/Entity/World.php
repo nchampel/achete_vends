@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\WorldRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WorldRepository::class)]
 class World
@@ -26,6 +27,7 @@ class World
 
     #[ORM\ManyToOne(inversedBy: 'worlds')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['user:read'])]
     private ?WorldData $worldData = null;
 
     // #[ORM\ManyToOne(inversedBy: 'world')]

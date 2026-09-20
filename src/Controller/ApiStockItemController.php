@@ -36,23 +36,37 @@ class ApiStockItemController extends AbstractController
             $stockItems = $this->stockItemRepository->findStockItemsOfUserNullBuyable();
             $stockItemsData = [];
             foreach ($stockItems as $stockItem){
-                $stockItemsData[] = [
-                    "final_pay_price" => $stockItem->getFinalPayPrice(), 
-                    "user_sell_price" => $stockItem->getUserSellPrice(), 
-                    "final_sell_price" => null, 
-                    // "final_sell_price" => $stockItem->getFinalSellPrice(), 
-                    "name" => $stockItem->getItem()->getName(), 
-                    "id" => $stockItem->getId(),
-                    "number" => $stockItem->getNumber(),
-                    'isAnalysed' => $stockItem->isAnalysed(),
-                    'isPendingSale' => $stockItem->isPendingSale(),
-                    'isSold' => $stockItem->isSold(),
-                ];
+                $stockItemsData[] = $this->json([
+                    // "final_pay_price" => $stockItem->getFinalPayPrice(), 
+                    // "user_sell_price" => $stockItem->getUserSellPrice(), 
+                    // "final_sell_price" => null, 
+                    // // "final_sell_price" => $stockItem->getFinalSellPrice(), 
+                    // "name" => $stockItem->getItem()->getName(), 
+                    // "id" => $stockItem->getId(),
+                    // "number" => $stockItem->getNumber(),
+                    // 'isAnalysed' => $stockItem->isAnalysed(),
+                    // 'isPendingSale' => $stockItem->isPendingSale(),
+                    // 'isSold' => $stockItem->isSold(),
+
+                    'stockItem' => $stockItem
+                 ], 200, [], [
+                    'groups' => [
+                        'stockItem:read',
+                    ]]);
+                
             }
-            return $this->json([
-                // 'message' => 'JWT valide !',
-                'stock_items_stock' => $stockItemsData,
-            ]);
+            // return $this->json([
+            //     // 'message' => 'JWT valide !',
+            //     'stock_items_stock' => $stockItemsData,
+            // ]);
+            return $this->json(
+                $stockItems,
+                200,
+                [],
+                [
+                    'groups' => ['stockItem:read'],
+                ]
+            );
 
         // $jwt= "token";
 
@@ -87,18 +101,34 @@ class ApiStockItemController extends AbstractController
             $stockItems = $this->stockItemRepository->findStockItemsOfAllUsersNotSold();
             $stockItemsData = [];
             foreach ($stockItems as $stockItem){
-                $stockItemsData[] = [
-                    "final_pay_price" => $stockItem->getFinalPayPrice(), 
-                    "user_sell_price" => $stockItem->getUserSellPrice(), 
-                    "final_sell_price" => $stockItem->getFinalSellPrice(), 
-                    "name" => $stockItem->getItem()->getName(), 
-                    "id" => $stockItem->getId(), 
-                    "number" => $stockItem->getNumber(),
-                    'isAnalysed' => $stockItem->isAnalysed(),
-                    'isPendingSale' => $stockItem->isPendingSale(),
-                    'isSold' => $stockItem->isSold(),
-                ];
+                $stockItemsData[] = $this->json([
+                    // "final_pay_price" => $stockItem->getFinalPayPrice(), 
+                    // "user_sell_price" => $stockItem->getUserSellPrice(), 
+                    // "final_sell_price" => null, 
+                    // // "final_sell_price" => $stockItem->getFinalSellPrice(), 
+                    // "name" => $stockItem->getItem()->getName(), 
+                    // "id" => $stockItem->getId(),
+                    // "number" => $stockItem->getNumber(),
+                    // 'isAnalysed' => $stockItem->isAnalysed(),
+                    // 'isPendingSale' => $stockItem->isPendingSale(),
+                    // 'isSold' => $stockItem->isSold(),
+
+                    'stockItem' => $stockItem
+                 ], 200, [], [
+                    'groups' => [
+                        'stockItem:read',
+                    ]]);
             }
+
+return $this->json(
+                $stockItems,
+                200,
+                [],
+                [
+                    'groups' => ['stockItem:read'],
+                ]
+            );
+
             return $this->json([
                 // 'message' => 'JWT valide !',
                 'stock_items_stock' => $stockItemsData,
@@ -126,26 +156,33 @@ class ApiStockItemController extends AbstractController
         // }
 
         try {
-            $message = $this->itemService->buyItem(
+            $result = $this->itemService->buyItem(
                 $user,
                 $stockItem
             );
 
             return $this->json([
-                'message' => $message,
-                'stockItem' => [
-                    "final_pay_price" => $stockItem->getFinalPayPrice(), 
-                    "user_sell_price" => $stockItem->getUserSellPrice(), 
-                    "final_sell_price" => $stockItem->getFinalSellPrice(), 
-                    'price' => $stockItem->getUserSellPrice(),
-                    "name" => $stockItem->getItem()->getName(), 
-                    'id' => $stockItem->getId(),
-                    'number' => $stockItem->getNumber(),
-                    'isAnalysed' => $stockItem->isAnalysed(),
-                    'isPendingSale' => $stockItem->isPendingSale(),
-                    'isSold' => $stockItem->isSold(),
-                ],
-                'user' => $user->getProfileData(),
+                'message' => $result["message"],
+                    'user' => $result['user'],
+                    'stockItem' => $result['stockItem'],
+                ], 200, [], [
+                    'groups' => [
+                        'user:read',
+                        'stockItem:read',
+                    ],
+                // 'stockItem' => [
+                //     "final_pay_price" => $stockItem->getFinalPayPrice(), 
+                //     "user_sell_price" => $stockItem->getUserSellPrice(), 
+                //     "final_sell_price" => $stockItem->getFinalSellPrice(), 
+                //     'price' => $stockItem->getUserSellPrice(),
+                //     "name" => $stockItem->getItem()->getName(), 
+                //     'id' => $stockItem->getId(),
+                //     'number' => $stockItem->getNumber(),
+                //     'isAnalysed' => $stockItem->isAnalysed(),
+                //     'isPendingSale' => $stockItem->isPendingSale(),
+                //     'isSold' => $stockItem->isSold(),
+                // ],
+                // 'user' => $user->getProfileData(),
             ]);
         } catch (\RuntimeException $e) {
             return $this->json([
@@ -194,20 +231,11 @@ class ApiStockItemController extends AbstractController
             return $this->json([
                 'message' => $message,
                 // 'result' => $result,
-                'stockItem' => [
-                    "final_pay_price" => $stockItem->getFinalPayPrice(), 
-                    "user_sell_price" => $stockItem->getUserSellPrice(), 
-                    "final_sell_price" => $stockItem->getFinalSellPrice(), 
-                    'price' => $stockItem->getUserSellPrice(),
-                    "name" => $stockItem->getItem()->getName(), 
-                    'id' => $stockItem->getId(),
-                    'number' => $stockItem->getNumber(),
-                    'isAnalysed' => $stockItem->isAnalysed(),
-                    'isPendingSale' => $stockItem->isPendingSale(),
-                    'isSold' => $stockItem->isSold(),
-                ],
-                // 'user' => $user->getProfileData(),
-            ]);
+                'stockItem' => $stockItem
+                 ], 200, [], [
+                    'groups' => [
+                        'stockItem:read',
+                    ]]);
         } catch (\RuntimeException $e) {
             return $this->json([
                 'message' => $e->getMessage(),
@@ -258,20 +286,11 @@ class ApiStockItemController extends AbstractController
             return $this->json([
                 'message' => $message,
                 // 'result' => $result,
-                'stockItem' => [
-                    "final_pay_price" => $stockItem->getFinalPayPrice(), 
-                    "user_sell_price" => $stockItem->getUserSellPrice(), 
-                    "final_sell_price" => $stockItem->getFinalSellPrice(), 
-                    'price' => $stockItem->getUserSellPrice(),
-                    "name" => $stockItem->getItem()->getName(), 
-                    'id' => $stockItem->getId(),
-                    'number' => $stockItem->getNumber(),
-                    'isAnalysed' => $stockItem->isAnalysed(),
-                    'isPendingSale' => $stockItem->isPendingSale(),
-                    'isSold' => $stockItem->isSold(),
-                ],
-                // 'user' => $user->getProfileData(),
-            ]);
+                'stockItem' => $stockItem
+                 ], 200, [], [
+                    'groups' => [
+                        'stockItem:read',
+                    ]]);
         } catch (\RuntimeException $e) {
             return $this->json([
                 'message' => $e->getMessage(),

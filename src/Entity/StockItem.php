@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\StockItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StockItemRepository::class)]
 class StockItem
@@ -11,22 +12,27 @@ class StockItem
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['stockItem:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'stockItems')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['stockItem:read'])]
     private ?Item $item = null;
 
     #[ORM\Column]
+    #[Groups(['stockItem:read'])]
     private ?float $finalPayPrice = null;
 
     #[ORM\Column]
     private ?float $finalSellPrice = null;
 
     #[ORM\Column]
+    #[Groups(['stockItem:read'])]
     private ?bool $isBought = false;
 
     #[ORM\Column]
+    #[Groups(['stockItem:read'])]
     private ?bool $isSold = false;
 
     #[ORM\Column]
@@ -39,6 +45,7 @@ class StockItem
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['stockItem:read'])]
     private ?float $userSellPrice = null;
 
     #[ORM\Column(nullable: true)]
@@ -48,15 +55,19 @@ class StockItem
     private ?\DateTimeImmutable $soldAt = null;
 
     #[ORM\Column]
+    #[Groups(['stockItem:read'])]
     private ?bool $isAnalysed = false;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['stockItem:read'])]
     private ?\DateTimeImmutable $analysedAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['stockItem:read'])]
     private ?int $number = null;
 
     #[ORM\Column]
+    #[Groups(['stockItem:read'])]
     private ?bool $isPendingSale = null;
 
     #[ORM\Column(nullable: true)]

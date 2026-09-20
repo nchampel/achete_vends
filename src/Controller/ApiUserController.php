@@ -41,7 +41,12 @@ class ApiUserController extends AbstractController
 
         return $this->json([
                 // 'message' => 'JWT valide !',
-                'user' => $userData,
+                // 'user' => $userData,
+                'user' => $user
+                ], 200, [], [
+                    'groups' => [
+                        'user:read',
+                    ],
             ]);
 
         // $jwt= "token";

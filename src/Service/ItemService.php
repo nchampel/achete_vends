@@ -22,10 +22,10 @@ class ItemService
     /**
      * Achat par le joueur d'un article.
      *
-     * @return string
+     * @return array
      *         achat d'un article.
      */
-    public function buyItem(User $user, StockItem $stockItem): string
+    public function buyItem(User $user, StockItem $stockItem): array
     {
         // stockitem null ou pas achetable
         $this->entityManager->beginTransaction();
@@ -76,7 +76,9 @@ class ItemService
         $this->entityManager->flush();
         // IMPORTANT
         $this->entityManager->commit();
-        return "Achat effectué";
+        return ["message" => "Achat effectué",
+        "user" => $user,
+        "stockItem" => $stockItem];
 
 
         } catch (\Throwable $e) {
@@ -128,7 +130,7 @@ class ItemService
         
             // $stockItem = $this->worldRepository->findOneBy(['user' => $user, 'worldData' => $newWorldData]);
 
-            sleep(5);
+            sleep(300);
 
             // return "Analyse effectuée";
             
