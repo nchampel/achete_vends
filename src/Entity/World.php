@@ -110,4 +110,13 @@ class World
 
     //     return $this;
     // }
+
+    public function getName(){
+        return $this->getWorldData()->getName();
+    }
+
+    public function __toString(): string
+{
+    return $this->getName() ?? '';
+}
 }

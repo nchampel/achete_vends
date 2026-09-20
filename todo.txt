@@ -108,3 +108,13 @@ faire des beaux log avec date h:m:s pour les commands, et srutout vivrer les log
 
  static Future<User> buyStockItem(int id) async {
     String url = '$baseUrl/api/stock/item/$id/buy'; il faut faire remonter sotckitem aussi car création number
+
+attention !!!!!!!!!!!!!!!! changer mdp en ligne des test (je soupçonne aaaaaa)
+
+faire limite 4 achats par dépôt article, rendre dépôt payant, avec taxe 5%, si trop cher ou pas assez cher la vente ne se fait pas (inférieur à 20% et sup à 20%)
+
+paiement pour analyse, jusqu'à 10% du prix, à voir, calculer pour que ce ne soit pas rentable à chaque coup, jeter achat inventaire
+
+ok corriger bug attribution numéro, certainement ne comtpe pas ceux qui ont été vendu => apparement la fonction est bonne
+
+corriger bug page admin user edit
