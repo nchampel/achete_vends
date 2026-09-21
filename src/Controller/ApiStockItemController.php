@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 #[Route('/api')]
 class ApiStockItemController extends AbstractController
@@ -17,11 +18,13 @@ class ApiStockItemController extends AbstractController
     public function __construct(
         // private EntityManagerInterface $entityManager,
         private StockItemRepository $stockItemRepository,
-        private ItemService $itemService
+        private ItemService $itemService,
         // private WorldRepository $worldRepository,
+        private NormalizerInterface $serializer,
     ) {
         $this->itemService = $itemService;
         $this->stockItemRepository = $stockItemRepository;
+        $this->serializer = $serializer;
         // $this->entityManager = $entityManager;
     }
 
@@ -100,34 +103,31 @@ class ApiStockItemController extends AbstractController
         /** @var \App\Entity\StockItem[] $stockItems*/
             $stockItems = $this->stockItemRepository->findStockItemsOfAllUsersNotSold();
             $stockItemsData = [];
-            foreach ($stockItems as $stockItem){
-                $stockItemsData[] = $this->json([
-                    // "final_pay_price" => $stockItem->getFinalPayPrice(), 
-                    // "user_sell_price" => $stockItem->getUserSellPrice(), 
-                    // "final_sell_price" => null, 
-                    // // "final_sell_price" => $stockItem->getFinalSellPrice(), 
-                    // "name" => $stockItem->getItem()->getName(), 
-                    // "id" => $stockItem->getId(),
-                    // "number" => $stockItem->getNumber(),
-                    // 'isAnalysed' => $stockItem->isAnalysed(),
-                    // 'isPendingSale' => $stockItem->isPendingSale(),
-                    // 'isSold' => $stockItem->isSold(),
+            $data = [];
+            foreach ($stockItems as $stockItem) {
+        // On utilise uniquement le groupe stockItem:read
+        $stockItemData = $this->serializer->normalize(
+            $stockItem,
+            null,
+            [
+                'groups' => ['stockItem:read'],
+            ]
+        );
 
-                    'stockItem' => $stockItem
-                 ], 200, [], [
-                    'groups' => [
-                        'stockItem:read',
-                    ]]);
-            }
+        // On ajoute finalSellPrice uniquement si l'item est analysé
+        if ($stockItem->isAnalysed()) {
+            $stockItemData['finalSellPrice'] = $stockItem->getFinalSellPrice();
+        }
 
-return $this->json(
-                $stockItems,
-                200,
-                [],
-                [
-                    'groups' => ['stockItem:read'],
-                ]
-            );
+        $data[] = $stockItemData;
+    }
+
+    return $this->json([
+        'stockItems' => $data,
+    ]);
+                
+
+
 
             return $this->json([
                 // 'message' => 'JWT valide !',
@@ -228,8 +228,22 @@ return $this->json(
             //     $result = true;
             // }
 
+            $data = $this->serializer->normalize(
+                $stockItem,
+                null,
+                ['groups' => ['stockItem:read']]
+            );
+
+            $data['finalSellPrice'] = $stockItem->getFinalSellPrice();
+
             return $this->json([
                 'message' => $message,
+                'stockItem' => $data,
+            ], 200);
+
+            return $this->json([
+                'message' => $message,
+                'finalSellPrice' => $stockItem->getFinalSellPrice(),
                 // 'result' => $result,
                 'stockItem' => $stockItem
                  ], 200, [], [
@@ -282,6 +296,19 @@ return $this->json(
             // if($message == "Analyse effectuée"){
             //     $result = true;
             // }
+
+            $data = $this->serializer->normalize(
+                $stockItem,
+                null,
+                ['groups' => ['stockItem:read']]
+            );
+
+            $data['finalSellPrice'] = $stockItem->getFinalSellPrice();
+
+            return $this->json([
+                'message' => $message,
+                'stockItem' => $data,
+            ], 200);
 
             return $this->json([
                 'message' => $message,

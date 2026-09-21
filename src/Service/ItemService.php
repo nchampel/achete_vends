@@ -130,7 +130,8 @@ class ItemService
         
             // $stockItem = $this->worldRepository->findOneBy(['user' => $user, 'worldData' => $newWorldData]);
 
-            sleep(300);
+            // sleep(300);
+            sleep(5);
 
             // return "Analyse effectuée";
             

@@ -117,4 +117,8 @@ paiement pour analyse, jusqu'à 10% du prix, à voir, calculer pour que ce ne so
 
 ok corriger bug attribution numéro, certainement ne comtpe pas ceux qui ont été vendu => apparement la fonction est bonne
 
-corriger bug page admin user edit
+ok corriger bug page admin user edit
+
+corriger design navbar en dynamique (mauvais affichage pour maman)
+
+faire écran avant qd token expiré pour dire qu'on doit se reconnecter session expiré, merci de te reconnecter
