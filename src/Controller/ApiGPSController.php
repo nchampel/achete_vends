@@ -39,15 +39,15 @@ class ApiGPSController extends AbstractController
     ],
         [
         "id" => 3,
-        "latitude" => 37.4219982,
-        "longitude" => -122.084,
+        "latitude" => 37.4219983,
+        "longitude" => -122.08410,
         "activationRadius" => 3,
         "type" => "wood"
     ],
     [
         "id" => 4,
-        "latitude" => 37.4219984,
-        "longitude" => -122.084,
+        "latitude" => 37.4219987,
+        "longitude" => -122.08390,
         "activationRadius" => 3,
         "type" => "water"
     ],
@@ -60,8 +60,8 @@ class ApiGPSController extends AbstractController
     ],
     [
         "id" => 6,
-        "latitude" => 43.4237382,
-        "longitude" => 5.2873261,
+        "latitude" => 43.4237000,
+        "longitude" => 5.2873000,
         "activationRadius" => 3,
         "type" => "water"
     ],
