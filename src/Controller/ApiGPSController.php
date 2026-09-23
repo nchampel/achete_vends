@@ -53,8 +53,8 @@ class ApiGPSController extends AbstractController
     ],
         [
         "id" => 5,
-        "latitude" => 43.4237381,
-        "longitude" => 5.2873262,
+        "latitude" => 43.4237600,
+        "longitude" => 5.2875000,
         "activationRadius" => 3,
         "type" => "wood"
     ],
