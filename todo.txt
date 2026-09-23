@@ -122,3 +122,5 @@ ok corriger bug page admin user edit
 corriger design navbar en dynamique (mauvais affichage pour maman)
 
 faire écran avant qd token expiré pour dire qu'on doit se reconnecter session expiré, merci de te reconnecter
+
+redit : faire système d'objet collectionnable (genre trouvable dans la forêt, et autres mieux) donnant bonus en fonction des sets trouvés, sinon on paye jeux donnant proba de les donner, genre on construit un casino
