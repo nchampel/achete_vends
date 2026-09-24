@@ -49,10 +49,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read'])]
     private ?World $currentWorld = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Building::class, orphanRemoval: true)]
+    private Collection $buildings;
+
     public function __construct()
     {
         $this->stockItems = new ArrayCollection();
         $this->worlds = new ArrayCollection();
+        $this->buildings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -244,6 +248,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             'world_number' => $this->getCurrentWorld()->getWorldData()->getId(),
             'world_name' => $this->getCurrentWorld()->getWorldData()->getName(),
         ];
+    }
+
+    /**
+     * @return Collection<int, Building>
+     */
+    public function getBuildings(): Collection
+    {
+        return $this->buildings;
+    }
+
+    public function addBuilding(Building $building): static
+    {
+        if (!$this->buildings->contains($building)) {
+            $this->buildings->add($building);
+            $building->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBuilding(Building $building): static
+    {
+        if ($this->buildings->removeElement($building)) {
+            // set the owning side to null (unless already changed)
+            if ($building->getUser() === $this) {
+                $building->setUser(null);
+            }
+        }
+
+        return $this;
     }
 
 }

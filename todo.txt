@@ -124,3 +124,50 @@ corriger design navbar en dynamique (mauvais affichage pour maman)
 faire écran avant qd token expiré pour dire qu'on doit se reconnecter session expiré, merci de te reconnecter
 
 redit : faire système d'objet collectionnable (genre trouvable dans la forêt, et autres mieux) donnant bonus en fonction des sets trouvés, sinon on paye jeux donnant proba de les donner, genre on construit un casino
+
+23/9 manon durand a proposé centre d'intérêt des villes à découvrir. moi en voyant rubis en plastique par terre j'ai pensé faire poper régulièrement et aléatoirement des ressources rares.
+manon m'a fait penser que je pouvais faire des circuits à compléter par ville, donnant bonus, pour marseille, plusieurs circuits.
+elle a proposé de me rapprocher en cas des organismes de ville car j'ai l'appli où on peut rentrer les centres culturels, etc.
+moi je compte proposer au joueur soit de jouer zavec gps, qui va donner un bonus (car il se déplace physiquement), soit classique dans son fauteuil. et dehors il y a des ressources déjà implantées, et d'autres qu'on pourra semer nous, et récoltable x heures après
+chatgpt propose event de pop où l'on est rpévenu, qui pourrait durer sur plusieurs jours, genre 1-2 semaines, pour avoir le temps de chercher
+
+Je ferais même 3 niveaux d'information
+🟢 Ressource proche
+
+Le radar indique simplement :
+
+🌿 Ressource détectée
+
+Tu ne sais pas exactement ce que c'est.
+
+Tu te rapproches.
+
+🟡 Plus proche
+
+Le signal devient plus précis :
+
+🌿 Ressource végétale
+
+Puis :
+
+📍 à ~35 m
+
+🔴 Très proche
+
+Tu arrives presque dessus :
+
+🍎 Pommier sauvage
+
+12 m
+
+Et tu dois encore réellement te déplacer jusqu'au spot pour récolter.
+
+Ça donne une petite boucle de chasse au trésor. cf application plantes virtuelles
+
+
+popage ressources, restant 1j par ex, disparition, et popage différent selon la ressource, et de nouveaux points ajoutés pour 1j, les anciens sont supprimés
+
+popage camp de brigands qu'on pourra chercher physiquement, et en étant équipé, on pourra démanteler
+réfléchir à version sans gps
+
+idée carte explorée petit à petit comme age of empires (suggéré par manon) couplée avec le radar et une carte qui se dévoile
