@@ -2,11 +2,11 @@ ok déplacer repo au contrôleur de world méthode unlockworld => fait, dans un 
 ok tester méthode => ok
 ok créer méthode dans stockitem pour créer les stock item au cron => fait, mais faut sécuriser avec app_token => fait
 acheter amélioration qui augmente quantité de stockitem à chaque réapprovisionnement => dans stockitemcontroller generateCron
-réapproviosennement toutes les 30 min
-créer fonction pour acheter article => à tester
+ok réapproviosennement toutes les 30 min
+ok créer fonction pour acheter article => à tester
 créer fonction pour mettre en vente article => test en cours, mais il faut intégrer achat prix voulu, vendre doit envoyer sur un formulaire où l'on voit prix conseillé, prix d'acaht, 
 et le prix qu'on peut entrer, défaut prix conseillé
-créer fonction pour vérifier si article va être acheté
+ok créer fonction pour vérifier si article va être acheté
 NE PAS OUBLIER QUE SI USER SELL PRICE A 0, C EST QU AUCUN PRIX N A ETE RENTRE PAR L UTILISATEUR, mettre dans formualire achat le prix voulu de vente, éditable, 
 attention, utilisateur ne peut éditer que usersellprice
 faire maintenance (appcontroller de ibei)
@@ -22,7 +22,7 @@ tester achat et vente, modification prix, par appel insomnia app_stock_item_sell
 
 pharmaciemetrolarose.rh@gmail.com
 
-seule solution pour texte du bouton : donner liste caractères cinzel black et lui demander d'appliquer l'effet du bouton que chatgpt a généré, 
+ok seule solution pour texte du bouton : donner liste caractères cinzel black et lui demander d'appliquer l'effet du bouton que chatgpt a généré, 
 apparement fournir le ttf (recherche ttf => analyser une police) et l'image du bouton
 
 chaque jour on a droit de réclamer une petite somme de pièces
@@ -85,9 +85,9 @@ cf idée gameplay mobile, qui contient idée de simulation de 1000 joueurs sur 3
 
  #[Route('/generate/stock/item/{token}', name: 'app_stock_item_generate', methods: ['GET'])] à désactiver après vu Cathy
 
- faire boutons analyser et vendre
- faire 2e card stockitem, renommer la 1ere
- faire fonction analyse (temps + révélation du prix recommandé) => fonction en cours, entité mise à jour et migrée, mais pas en ligne
+ ok faire boutons analyser et vendre
+ ok faire 2e card stockitem, renommer la 1ere
+ ok faire fonction analyse (temps + révélation du prix recommandé) => fonction en cours, entité mise à jour et migrée, mais pas en ligne
  faire correction analysed, bouton + sur argent en flutter, analyseStartedAt à implémenter
  constante temps d'analyse, ou carrément table avec niveaux
 
@@ -171,3 +171,15 @@ popage camp de brigands qu'on pourra chercher physiquement, et en étant équip�
 réfléchir à version sans gps
 
 idée carte explorée petit à petit comme age of empires (suggéré par manon) couplée avec le radar et une carte qui se dévoile
+
+24/9
+
+enregistrement position bâtiment fait, corriger petits bugs
+demain faire de même avec resources, les ressources qu'on plante, et les rendre récoltable
+entité ressource en stock à implémenter, que je puisse aller dans la rue pour les planter et récolter d'autres que je vais générer
+mais avant corriger rayon de récolte
+relier position proche du bâitment avec ouverture boutique et inventaire
+poser coffre ? ou tout dans boutique ?
+faire système dans profil soit on joue gps, soit sans bouger
+mettre son de ibei
+trouver son d'achat, analyse, vente, récolte

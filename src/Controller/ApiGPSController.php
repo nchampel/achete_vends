@@ -141,23 +141,40 @@ class ApiGPSController extends AbstractController
 
         $user = $this->getUser();
 
-        echo $type;
+        // echo $type;
 
         // on vérifie s'il n'y a pas déjà un bâtiment de ce type
         $buildingCheck = $buildingRepository->findOneBy(["user" => $user, "name" => $type]);
 
-        // echo($buildingCheck);
-
-        if(!is_null($buildingCheck)){
+        // Si déjà présent, on retourne simplement celui qui existe
+        if ($buildingCheck !== null) {
             return $this->json(
                 [
-                "type" => "déjà enregistré",
-                // "latitude" => 43.52975,
-                // "longitude" => 5.44740,
-                // "activationRadius" => 3,
-                // "type" => "wood"
-            ]);
+                    'created' => false,
+                    'building' => $buildingCheck,
+                ],
+                Response::HTTP_OK,
+                [],
+                [
+                    'groups' => ['building:read'],
+                ]
+            );
         }
+
+        // echo($buildingCheck);
+
+        // if(!is_null($buildingCheck)){
+        //     return $this->json(
+        //         [
+        //         "type" => "déjà enregistré",
+        //         // "latitude" => 43.52975,
+        //         // "longitude" => 5.44740,
+        //         // "activationRadius" => 3,
+        //         // "type" => "wood"
+        //     ]);
+        // }
+
+        dump($user->getId());
 
         $building = new Building();
         $building->setName($type);
@@ -173,11 +190,17 @@ class ApiGPSController extends AbstractController
         
     return $this->json(
         [
-        "type" => $type,
+        // "type" => $type,
         // "latitude" => 43.52975,
         // "longitude" => 5.44740,
         // "activationRadius" => 3,
         // "type" => "wood"
+        'created' => true,
+        'building' => $building,
+                ], 200, [], [
+                    'groups' => [
+                        'building:read',
+                    ],
     ],
     
     );
@@ -191,11 +214,15 @@ class ApiGPSController extends AbstractController
 
         $user = $this->getUser();
 
+//         error_log('=== GET BUILDINGS ===');
+// error_log('USER ID = ' . ($user?->getId() ?? 'NULL'));
+
 
         // on vérifie s'il n'y a pas déjà un bâtiment de ce type
         $buildings = $buildingRepository->findBy(["user" => $user]);
 
         // echo($buildingCheck);
+        // error_log('BUILDINGS COUNT = ' . count($buildings));
 
         if(count($buildings) == 0){
             return $this->json(
