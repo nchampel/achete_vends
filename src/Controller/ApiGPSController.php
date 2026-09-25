@@ -101,7 +101,7 @@ class ApiGPSController extends AbstractController
     [
         "id" => 9,
         "latitude" => 43.4237402,
-        "longitude" => 5.2874969,
+        "longitude" => 5.2873069,
         "activationRadius" => 3,
         "type" => "water"
     ],
