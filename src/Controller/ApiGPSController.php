@@ -46,63 +46,63 @@ class ApiGPSController extends AbstractController
         "id" => 1,
         "latitude" => 43.52975,
         "longitude" => 5.44740,
-        "activationRadius" => 3,
+        "activationRadius" => 15,
         "type" => "wood"
     ],
     [
         "id" => 2,
         "latitude" => 43.52985,
         "longitude" => 5.44745,
-        "activationRadius" => 3,
+        "activationRadius" => 15,
         "type" => "water"
     ],
         [
-        "id" => 3,
+        "id" => 15,
         "latitude" => 37.4219983,
         "longitude" => -122.08410,
-        "activationRadius" => 3,
+        "activationRadius" => 15,
         "type" => "wood"
     ],
     [
         "id" => 4,
         "latitude" => 37.4219987,
         "longitude" => -122.08390,
-        "activationRadius" => 3,
+        "activationRadius" => 15,
         "type" => "water"
     ],
         [
         "id" => 5,
         "latitude" => 43.4237600,
         "longitude" => 5.2875000,
-        "activationRadius" => 3,
+        "activationRadius" => 15,
         "type" => "wood"
     ],
     [
         "id" => 6,
         "latitude" => 43.4237682,
         "longitude" => 5.2873261,
-        "activationRadius" => 3,
+        "activationRadius" => 15,
         "type" => "water"
     ],
         [
         "id" => 7,
         "latitude" => 37.4220295,
         "longitude" => -122.08410,
-        "activationRadius" => 3,
+        "activationRadius" => 15,
         "type" => "treasure"
     ],
     [
         "id" => 8,
         "latitude" => 37.4219815,
         "longitude" => -122.08370,
-        "activationRadius" => 3,
+        "activationRadius" => 15,
         "type" => "metal"
     ],
     [
         "id" => 9,
         "latitude" => 43.4237402,
         "longitude" => 5.2875569,
-        "activationRadius" => 3,
+        "activationRadius" => 15,
         "type" => "water"
     ],
     ]);
@@ -176,7 +176,7 @@ class ApiGPSController extends AbstractController
         //         "type" => "déjà enregistré",
         //         // "latitude" => 43.52975,
         //         // "longitude" => 5.44740,
-        //         // "activationRadius" => 3,
+        //         // "activationRadius" => 15,
         //         // "type" => "wood"
         //     ]);
         // }
@@ -200,7 +200,7 @@ class ApiGPSController extends AbstractController
         // "type" => $type,
         // "latitude" => 43.52975,
         // "longitude" => 5.44740,
-        // "activationRadius" => 3,
+        // "activationRadius" => 15,
         // "type" => "wood"
         'created' => true,
         'building' => $building,
@@ -237,7 +237,7 @@ class ApiGPSController extends AbstractController
                 "buildings" => "pas de bâtiments construit",
                 // "latitude" => 43.52975,
                 // "longitude" => 5.44740,
-                // "activationRadius" => 3,
+                // "activationRadius" => 15,
                 // "type" => "wood"
             ]);
         }
