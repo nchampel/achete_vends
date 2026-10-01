@@ -21,13 +21,13 @@ final class Version20260928115417 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE resource ADD activation_radius INT NOT NULL');
-        $this->addSql('ALTER TABLE resource_data CHANGE category type VARCHAR(50) NOT NULL');
+        // $this->addSql('ALTER TABLE resource_data CHANGE category type VARCHAR(50) NOT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE resource DROP activation_radius');
-        $this->addSql('ALTER TABLE resource_data CHANGE type category VARCHAR(50) NOT NULL');
+        // $this->addSql('ALTER TABLE resource_data CHANGE type category VARCHAR(50) NOT NULL');
     }
 }
