@@ -30,9 +30,13 @@ class WorldData
     #[ORM\OneToMany(mappedBy: 'world', targetEntity: World::class, orphanRemoval: true)]
     private Collection $worlds;
 
+    #[ORM\OneToMany(mappedBy: 'world', targetEntity: ResourceData::class, orphanRemoval: true)]
+    private Collection $resourceData;
+
     public function __construct()
     {
         $this->worlds = new ArrayCollection();
+        $this->resourceData = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,5 +113,35 @@ class WorldData
     public function __toString(): string
     {
         return $this->name ?? '';
+    }
+
+    /**
+     * @return Collection<int, ResourceData>
+     */
+    public function getResourceData(): Collection
+    {
+        return $this->resourceData;
+    }
+
+    public function addResourceData(ResourceData $resourceData): static
+    {
+        if (!$this->resourceData->contains($resourceData)) {
+            $this->resourceData->add($resourceData);
+            $resourceData->setWorld($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResourceData(ResourceData $resourceData): static
+    {
+        if ($this->resourceData->removeElement($resourceData)) {
+            // set the owning side to null (unless already changed)
+            if ($resourceData->getWorld() === $this) {
+                $resourceData->setWorld(null);
+            }
+        }
+
+        return $this;
     }
 }

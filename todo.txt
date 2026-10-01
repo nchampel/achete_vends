@@ -187,3 +187,15 @@ trouver son d'achat, analyse, vente, récolte
 27/9
 
 idée de ring fit adventure irl, apparement cela n'existe pas
+
+
+28/9
+
+idée système de contrat/quête à remplir pour bonus ou ressources/xp/renommée ville
+
+tester app_api_gps_resources_get pour passage récoltable à périmé
+il faudra que je fasse le socket car là on peut rester fixe sur la carte, elles peuvent périmer, et faut que le serveur prévienne
+je dois mettre les iamges des ressources générées par chatIA
+
+demander chatIA d'avoir un bois et 2 bois (avec 3 j'ai déjà), en bdd, lors repop proba de changer le nombre de bois récolté (marche avec tout en fait)
+voir plus tard si je fais faire arbres plus fourni en fruit, idem osier

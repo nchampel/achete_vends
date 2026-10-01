@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Building;
+use App\Entity\Resource;
 use App\Enum\BuildingType;
 use App\Repository\BuildingRepository;
+use App\Repository\ResourceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,9 +29,52 @@ class ApiGPSController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('/gps', name: 'app_api_gps')]
-    public function index(): Response
+    private function determinateResourceIsCollectable(Resource $resource)
     {
+        if($resource->getPeremption() < new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'))){
+            return false;
+        } else {
+            // $resource->setIsCollectable(false);
+            // $this->entityManager->persist($resource);
+            // $this->entityManager->flush();
+            return true;
+        }
+    }
+
+    #[Route('/gps/resources/get', name: 'app_api_gps_resources_get')]
+    public function index(ResourceRepository $resourceRepository): Response
+    {
+        $playerPosition = ["latitude" => 43.4237596, "longitude" => 5.2876443];
+        // on récupère les ressources récoltables et on vérifie si elles sont pas périmées
+        $recoltableResources = [];
+        $resources = $resourceRepository->findResourcesAroundPlayer($playerPosition);
+        $countOutdatedResources = 0;
+
+        foreach($resources as $resource){
+            $isOutdated = $this->determinateResourceIsCollectable($resource);
+            if($isOutdated){
+                $countOutdatedResources++;
+                $resource->setIsCollectable(false);
+                $this->entityManager->persist($resource);
+            } else {
+                $recoltableResources[] = $resource;
+            }
+        }
+        if($countOutdatedResources > 0){
+            $this->entityManager->flush();
+        }
+
+        return $this->json([
+                'message' => "Ressources récupérées",
+                    'resources' => $recoltableResources,
+                ], 200, [], [
+                    'groups' => [
+                        'resource:read',
+                    ],
+            ]);
+        
+    
+
         // return $this->json([
         //     [
         //         "id" => 1,
