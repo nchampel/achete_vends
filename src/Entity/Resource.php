@@ -54,6 +54,9 @@ class Resource
     #[Groups(['resource:read'])]
     private ?bool $isCollectable = null;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $city = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -175,6 +178,18 @@ class Resource
     public function setIsCollectable(bool $isCollectable): static
     {
         $this->isCollectable = $isCollectable;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): static
+    {
+        $this->city = $city;
 
         return $this;
     }
