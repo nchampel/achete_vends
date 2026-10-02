@@ -199,3 +199,13 @@ je dois mettre les iamges des ressources générées par chatIA
 
 demander chatIA d'avoir un bois et 2 bois (avec 3 j'ai déjà), en bdd, lors repop proba de changer le nombre de bois récolté (marche avec tout en fait)
 voir plus tard si je fais faire arbres plus fourni en fruit, idem osier
+
+02/10
+
+coord génération ressources gps
+43.42633644578048, 5.279828224175385
+43.41393580098477, 5.281203607813426
+43.42754552656465, 5.301619008014103
+43.41386755709213, 5.300485058509215
+
+43.4138675, 5.2812036, 43.4275455, 5.3016190

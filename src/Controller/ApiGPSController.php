@@ -31,7 +31,9 @@ class ApiGPSController extends AbstractController
 
     private function determinateResourceIsCollectable(Resource $resource)
     {
-        if($resource->getPeremption() < new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'))){
+        // $now = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+        // echo  (string) $now->format('Y-m-d H:i:s');
+        if($resource->getPeremption() > new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'))){
             return false;
         } else {
             // $resource->setIsCollectable(false);
@@ -41,10 +43,14 @@ class ApiGPSController extends AbstractController
         }
     }
 
-    #[Route('/gps/resources/get', name: 'app_api_gps_resources_get')]
-    public function index(ResourceRepository $resourceRepository): Response
+    #[Route('/gps/resources/get', name: 'app_api_gps_resources_get', methods: ["POST"])]
+    public function index(ResourceRepository $resourceRepository, Request $request): Response
     {
         $playerPosition = ["latitude" => 43.4237596, "longitude" => 5.2876443];
+        $data = json_decode($request->getContent(), true);
+        $latitudeData = $data['latitude'] ?? null;
+        $longitudeData = $data['longitude'] ?? null;
+        $playerPosition = ["latitude" => $latitudeData, "longitude" => $longitudeData];
         // on récupère les ressources récoltables et on vérifie si elles sont pas périmées
         $recoltableResources = [];
         $resources = $resourceRepository->findResourcesAroundPlayer($playerPosition);

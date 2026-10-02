@@ -27,15 +27,18 @@ class ResourceRepository extends ServiceEntityRepository
     */
    public function findResourcesAroundPlayer(array $position): array
    {
-       return $this->createQueryBuilder('r')
+        // avant 0.01 pour 1km env
+        $longitude = 0.0025;
+        $latitude = 0.0018;
+        return $this->createQueryBuilder('r')
            ->andWhere('r.isCollectable = true')
            ->andWhere('r.isCollected = false')
            ->andWhere('r.longitude BETWEEN :minLongitude AND :maxLongitude')
            ->andWhere('r.latitude BETWEEN :minLatitude AND :maxLatitude')
-           ->setParameter('minLongitude', $position["longitude"] - 0.01)
-           ->setParameter('maxLongitude', $position["longitude"] + 0.01)
-           ->setParameter('minLatitude', $position["latitude"] - 0.01)
-           ->setParameter('maxLatitude', $position["latitude"] + 0.01)
+           ->setParameter('minLongitude', $position["longitude"] - $longitude)
+           ->setParameter('maxLongitude', $position["longitude"] + $longitude)
+           ->setParameter('minLatitude', $position["latitude"] - $latitude)
+           ->setParameter('maxLatitude', $position["latitude"] + $latitude)
            ->orderBy('r.id', 'ASC')
         //    ->setMaxResults(10)
            ->getQuery()
