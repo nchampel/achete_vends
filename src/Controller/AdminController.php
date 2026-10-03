@@ -2,9 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\ResourceStock;
+use App\Repository\ResourceStockRepository;
 use App\Repository\StockItemRepository;
+use App\Repository\UserRepository;
 use App\Repository\WorldDataRepository;
 use App\Repository\WorldRepository;
+use App\Service\ConfigService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -53,5 +58,27 @@ class AdminController extends AbstractController
             'worlds' => $worldRepository->findAll(),
             // 'user' => $this->getUser()
         ]);
+    }
+    #[Route('/user/resources/update', name: 'app_resources_update_players_admin', methods: ['GET'])]
+    public function userResourcesUpdate(ResourceStockRepository $resourceStockRepository, UserRepository $userRepository, ConfigService $configService, EntityManagerInterface $entityManager): Response
+    {
+        $resourcesType = $configService->getResourcesType();
+
+        $users = $userRepository->findAll();
+        foreach($users as $user){
+            foreach($resourcesType as $type){
+                $resource = new ResourceStock();
+                $resource->setName($type);
+                $resource->setQuantity(0);
+                $resource->setUser($user);
+                $entityManager->persist($resource);
+            }
+        }
+        $entityManager->flush();
+        
+        return $this->json([
+                'message' => "ressources crées",
+                   
+            ]);
     }
 }

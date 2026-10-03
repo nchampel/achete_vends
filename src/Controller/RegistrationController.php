@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\ResourceStock;
 use App\Entity\User;
 use App\Entity\World;
 use App\Form\RegistrationFormType;
@@ -9,6 +10,7 @@ use App\Repository\ConstantRepository;
 use App\Repository\WorldDataRepository;
 use App\Repository\WorldRepository;
 use App\Security\AppCustomAuthenticator;
+use App\Service\ConfigService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,12 +24,16 @@ class RegistrationController extends AbstractController
 {
     #[Route('/app/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AppCustomAuthenticator $authenticator, 
-    EntityManagerInterface $entityManager, ConstantRepository $repo, WorldRepository $worldRepository, WorldDataRepository $wdRepo): Response
+    EntityManagerInterface $entityManager, ConstantRepository $repo, WorldRepository $worldRepository, WorldDataRepository $wdRepo, ConfigService $configService): Response
     {
         $authorization = $repo->findOneBy(["name" => "inscription", "value" => 1]);
         if(!$authorization){
             return $this->redirectToRoute('app_register_error');
         }
+
+        // $resourcesType = ["bois", "osier", "pommes", "poires"];
+        $resourcesType = $configService->getResourcesType();
+
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -52,6 +58,14 @@ class RegistrationController extends AbstractController
             // Vérification 
             if ($currentWorld === null) { 
                 throw new \RuntimeException('Le WorldData numéro 1 est introuvable.'); 
+            }
+
+            foreach($resourcesType as $type){
+                $resource = new ResourceStock();
+                $resource->setName($type);
+                $resource->setQuantity(0);
+                $resource->setUser($user);
+                $entityManager->persist($resource);
             }
             // argent de départ
             // $user->setMoney(100);

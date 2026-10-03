@@ -209,3 +209,21 @@ coord génération ressources gps
 43.41386755709213, 5.300485058509215
 
 43.4138675, 5.2812036, 43.4275455, 5.3016190
+
+https://overpass-turbo.eu/?utm_source=chatgpt.com
+
+[out:json][timeout:60];
+
+(
+  way["highway"="footway"](43.4138675, 5.2812036, 43.4275455, 5.3016190);
+  way["highway"="path"](43.4138675, 5.2812036, 43.4275455, 5.3016190);
+  way["highway"="pedestrian"](43.4138675, 5.2812036, 43.4275455, 5.3016190);
+  way["highway"="living_street"](43.4138675, 5.2812036, 43.4275455, 5.3016190);
+  way["highway"="residential"](43.4138675, 5.2812036, 43.4275455, 5.3016190);
+  way["highway"="service"](43.4138675, 5.2812036, 43.4275455, 5.3016190);
+);
+
+out tags geom;
+
+garder affichage radar des bâtiments, mettre les ressources qu'on a planté aussi (créer chmap dans resource pour faire la distinction), 
+et quand on est à portée du bâtiment, si on le sélectionne cela ouvre l'onglet correspondant (ex marché, inventaire ...)

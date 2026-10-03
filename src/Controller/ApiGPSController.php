@@ -46,7 +46,7 @@ class ApiGPSController extends AbstractController
     #[Route('/gps/resources/get', name: 'app_api_gps_resources_get', methods: ["POST"])]
     public function index(ResourceRepository $resourceRepository, Request $request): Response
     {
-        $playerPosition = ["latitude" => 43.4237596, "longitude" => 5.2876443];
+        // $playerPosition = ["latitude" => 43.4237596, "longitude" => 5.2876443];
         $data = json_decode($request->getContent(), true);
         $latitudeData = $data['latitude'] ?? null;
         $longitudeData = $data['longitude'] ?? null;

@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\ResourceStock;
 use App\Entity\User;
 use App\Entity\World;
 use App\Repository\ConstantRepository;
 use App\Repository\WorldDataRepository;
 use App\Repository\WorldRepository;
 use App\Security\AppCustomAuthenticator;
+use App\Service\ConfigService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -67,7 +69,8 @@ class ApiUserController extends AbstractController
     }
     #[Route('/register', name: 'api_register', methods: ['POST'])]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AppCustomAuthenticator $authenticator, 
-    EntityManagerInterface $entityManager, ConstantRepository $repo, WorldRepository $worldRepository, WorldDataRepository $wdRepo, JWTTokenManagerInterface $JWTManager): JsonResponse
+    EntityManagerInterface $entityManager, ConstantRepository $repo, WorldRepository $worldRepository, WorldDataRepository $wdRepo, JWTTokenManagerInterface $JWTManager,
+    ConfigService $configService): JsonResponse
     {
         $authorization = $repo->findOneBy(["name" => "inscription", "value" => 1]);
         if(!$authorization){
@@ -158,6 +161,16 @@ class ApiUserController extends AbstractController
         // $user->setCurrentWorld($worldItem);
         $user->setCurrentWorld($currentWorld);
 
+        $resourcesType = $configService->getResourcesType();
+
+        foreach($resourcesType as $type){
+            $resource = new ResourceStock();
+            $resource->setName($type);
+            $resource->setQuantity(0);
+            $resource->setUser($user);
+            $entityManager->persist($resource);
+        }
+
         $entityManager->persist($user);
 
     //     return $this->json([
@@ -176,16 +189,40 @@ class ApiUserController extends AbstractController
         $token = $JWTManager->create($user);
 
         // do anything else you need here, like send an email
-        return $this->json([
-        'status_code' => 201,
-        'message' => 'Inscription réussie',
-        'user' => [
-            'id' => $user->getId(),
-            'pseudo' => $user->getPseudo(),
-            'user' => $user->getProfileData(),
-            'token' => $token,
-        ]
-    ], 201);
+    //     return $this->json([
+    //     'status_code' => 201,
+    //     'message' => 'Inscription réussie',
+    //     'user' => [
+    //         'id' => $user->getId(),
+    //         'pseudo' => $user->getPseudo(),
+    //         'user' => $user->getProfileData(),
+    //         'token' => $token,
+    //     ]
+    // ], 201);
+
+    return $this->json([
+                'status_code' => 201,
+                'message' => 'Inscription réussie',
+                'token' => $token,
+                //     'user' => $user,
+                // ], 201, [], [
+                //     'groups' => [
+                //         'user:read',
+                //     ],
+                // 'stockItem' => [
+                //     "final_pay_price" => $stockItem->getFinalPayPrice(), 
+                //     "user_sell_price" => $stockItem->getUserSellPrice(), 
+                //     "final_sell_price" => $stockItem->getFinalSellPrice(), 
+                //     'price' => $stockItem->getUserSellPrice(),
+                //     "name" => $stockItem->getItem()->getName(), 
+                //     'id' => $stockItem->getId(),
+                //     'number' => $stockItem->getNumber(),
+                //     'isAnalysed' => $stockItem->isAnalysed(),
+                //     'isPendingSale' => $stockItem->isPendingSale(),
+                //     'isSold' => $stockItem->isSold(),
+                // ],
+                // 'user' => $user->getProfileData(),
+            ], 201);
 
         return $userAuthenticator->authenticateUser(
             $user,

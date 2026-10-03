@@ -52,11 +52,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Building::class, orphanRemoval: true)]
     private Collection $buildings;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ResourceStock::class, orphanRemoval: true)]
+    #[Groups(['user:read'])]
+    private Collection $resourceStocks;
+
     public function __construct()
     {
         $this->stockItems = new ArrayCollection();
         $this->worlds = new ArrayCollection();
         $this->buildings = new ArrayCollection();
+        $this->resourceStocks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -274,6 +279,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($building->getUser() === $this) {
                 $building->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ResourceStock>
+     */
+    public function getResourceStocks(): Collection
+    {
+        return $this->resourceStocks;
+    }
+
+    public function addResourceStock(ResourceStock $resourceStock): static
+    {
+        if (!$this->resourceStocks->contains($resourceStock)) {
+            $this->resourceStocks->add($resourceStock);
+            $resourceStock->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResourceStock(ResourceStock $resourceStock): static
+    {
+        if ($this->resourceStocks->removeElement($resourceStock)) {
+            // set the owning side to null (unless already changed)
+            if ($resourceStock->getUser() === $this) {
+                $resourceStock->setUser(null);
             }
         }
 

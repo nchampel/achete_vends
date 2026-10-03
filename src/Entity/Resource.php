@@ -57,6 +57,9 @@ class Resource
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $city = null;
 
+    #[ORM\Column]
+    private ?int $finalQuantity = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -190,6 +193,18 @@ class Resource
     public function setCity(?string $city): static
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    public function getFinalQuantity(): ?int
+    {
+        return $this->finalQuantity;
+    }
+
+    public function setFinalQuantity(int $finalQuantity): static
+    {
+        $this->finalQuantity = $finalQuantity;
 
         return $this;
     }
