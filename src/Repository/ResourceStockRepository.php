@@ -25,7 +25,7 @@ class ResourceStockRepository extends ServiceEntityRepository
     /**
     * @return ResourceStock Retourne un resourcestock en fonction de l'utilisateur et du nom
     */
-   public function findByUserAndName(User $user, string $name): array
+   public function findByUserAndName(User $user, string $name): ResourceStock|null
    {
        return $this->createQueryBuilder('r')
            ->andWhere('r.user = :user')
