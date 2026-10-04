@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ResourceStock;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -20,6 +21,21 @@ class ResourceStockRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ResourceStock::class);
     }
+
+    /**
+    * @return ResourceStock Retourne un resourcestock en fonction de l'utilisateur et du nom
+    */
+   public function findByUserAndName(User $user, string $name): array
+   {
+       return $this->createQueryBuilder('r')
+           ->andWhere('r.user = :user')
+           ->andWhere('r.name = :name')
+           ->setParameter('user', $user)
+           ->setParameter('name', $name)
+           ->getQuery()
+           ->getOneOrNullResult()
+       ;
+   }
 
 //    /**
 //     * @return ResourceStock[] Returns an array of ResourceStock objects

@@ -7,6 +7,7 @@ use App\Entity\Resource;
 use App\Enum\BuildingType;
 use App\Repository\BuildingRepository;
 use App\Repository\ResourceRepository;
+use App\Repository\ResourceStockRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -165,6 +166,37 @@ class ApiGPSController extends AbstractController
     ],
     ]);
         
+    }
+
+    #[Route('/gps/resource/collect/{id<\d+>}', name: 'app_api_gps_resource_collect', methods: ['POST'])]
+    public function collect(Resource $resource, ResourceStockRepository $resourceStockRepository, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $name = $data['name'] ?? null;
+        $quantity = $resource->getFinalQuantity();
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+        $resourceStock = $resourceStockRepository->findByUserAndName($user, $name);
+        $finalQuantity = $resourceStock->getQuantity() + $quantity;
+
+        $resourceStock->setQuantity($finalQuantity);
+        $entityManager->persist($resourceStock);
+        $entityManager->flush();
+
+        // $user->getResourceStocks();
+
+        return $this->json(
+            [
+                'collected' => true,
+                'resourceStock' => $resourceStock,
+            ],
+            // Response::HTTP_OK,
+            // [],
+            // [
+            //     'groups' => ['building:read'],
+            // ]
+        );
     }
 
     #[Route('/gps/building/position/save', name: 'app_api_gps_building_position_save', methods: ["POST"])]
