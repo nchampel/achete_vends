@@ -15,7 +15,7 @@ class ResourceStock
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'resource_stock:read'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'resourceStocks')]
@@ -23,7 +23,7 @@ class ResourceStock
     private ?User $user = null;
 
     #[ORM\Column]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'resource_stock:read'])]
     private ?int $quantity = null;
 
     public function getId(): ?int

@@ -191,11 +191,11 @@ class ApiGPSController extends AbstractController
                 'collected' => true,
                 'resourceStock' => $resourceStock,
             ],
-            // Response::HTTP_OK,
-            // [],
-            // [
-            //     'groups' => ['building:read'],
-            // ]
+            Response::HTTP_OK,
+            [],
+            [
+                'groups' => ['resource_stock:read'],
+            ]
         );
     }
 
