@@ -39,7 +39,30 @@ class ResourceRepository extends ServiceEntityRepository
            ->setParameter('maxLongitude', $position["longitude"] + $longitude)
            ->setParameter('minLatitude', $position["latitude"] - $latitude)
            ->setParameter('maxLatitude', $position["latitude"] + $latitude)
-           ->orderBy('r.id', 'ASC')
+        //    ->orderBy('r.id', 'ASC')
+        //    ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+    /**
+     * retourne les ressources périmées et ressources récoltées 
+     * dont date péremption + temps de repop <= temps actuel cette ligne on la fait dans el controller, enfin le service
+    * @return Resource[] Returns an array of Resource objects
+    */
+   public function findResourcesNotCollectableOrCollected(): array
+   {
+        // $now = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+        return $this->createQueryBuilder('r')
+           ->andWhere('r.isCollectable = false')
+           ->orWhere('r.isCollected = true')
+        //    ->andWhere('r.peremption <= :now')
+        //    ->andWhere('r.latitude BETWEEN :minLatitude AND :maxLatitude')
+        //    ->setParameter('now', $now->add(r.finalRepopTime))
+        //    ->setParameter('maxLongitude', $position["longitude"] + $longitude)
+        //    ->setParameter('minLatitude', $position["latitude"] - $latitude)
+        //    ->setParameter('maxLatitude', $position["latitude"] + $latitude)
+        //    ->orderBy('r.id', 'ASC')
         //    ->setMaxResults(10)
            ->getQuery()
            ->getResult()

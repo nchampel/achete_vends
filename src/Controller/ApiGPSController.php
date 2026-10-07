@@ -8,6 +8,7 @@ use App\Enum\BuildingType;
 use App\Repository\BuildingRepository;
 use App\Repository\ResourceRepository;
 use App\Repository\ResourceStockRepository;
+use App\Service\ResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,22 +31,12 @@ class ApiGPSController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    private function determinateResourceIsCollectable(Resource $resource)
-    {
-        // $now = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
-        // echo  (string) $now->format('Y-m-d H:i:s');
-        if($resource->getPeremption() > new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'))){
-            return false;
-        } else {
-            // $resource->setIsCollectable(false);
-            // $this->entityManager->persist($resource);
-            // $this->entityManager->flush();
-            return true;
-        }
-    }
+    // on a la ressource périmée qui est isCollectable false et isCollected false
+    // on a la ressource récoltée qui est isCollectable false et isCollected true
+    // on a la ressource non récoltée non périmée qui est isCollectable true et isCollected false
 
     #[Route('/gps/resources/get', name: 'app_api_gps_resources_get', methods: ["POST"])]
-    public function index(ResourceRepository $resourceRepository, Request $request): Response
+    public function index(ResourceRepository $resourceRepository, Request $request, ResourceService $resourceService): Response
     {
         // $playerPosition = ["latitude" => 43.4237596, "longitude" => 5.2876443];
         $data = json_decode($request->getContent(), true);
@@ -56,9 +47,10 @@ class ApiGPSController extends AbstractController
         $recoltableResources = [];
         $resources = $resourceRepository->findResourcesAroundPlayer($playerPosition);
         $countOutdatedResources = 0;
+        $now = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
 
         foreach($resources as $resource){
-            $isOutdated = $this->determinateResourceIsCollectable($resource);
+            $isOutdated = $resourceService->determinateResourceIsCollectable($resource, $now);
             if($isOutdated){
                 $countOutdatedResources++;
                 $resource->setIsCollectable(false);
@@ -169,34 +161,70 @@ class ApiGPSController extends AbstractController
     }
 
     #[Route('/gps/resource/collect/{id<\d+>}', name: 'app_api_gps_resource_collect', methods: ['POST'])]
-    public function collect(Resource $resource, ResourceStockRepository $resourceStockRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function collect(Resource $resource, ResourceStockRepository $resourceStockRepository, Request $request, EntityManagerInterface $entityManager,
+    ResourceService $resourceService): Response
     {
-        $data = json_decode($request->getContent(), true);
-        $name = $data['name'] ?? null;
-        $quantity = $resource->getFinalQuantity();
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
+        if($resource->isCollectable()){
+            $now = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
 
-        $resourceStock = $resourceStockRepository->findByUserAndName($user, $name);
-        $finalQuantity = $resourceStock->getQuantity() + $quantity;
+            $isOutdated = $resourceService->determinateResourceIsCollectable($resource, $now);
+               if(!$isOutdated){
 
-        $resourceStock->setQuantity($finalQuantity);
-        $entityManager->persist($resourceStock);
-        $entityManager->flush();
-
-        // $user->getResourceStocks();
-
-        return $this->json(
-            [
-                'collected' => true,
-                'resourceStock' => $resourceStock,
-            ],
-            Response::HTTP_OK,
-            [],
-            [
-                'groups' => ['resource_stock:read'],
-            ]
-        );
+                $data = json_decode($request->getContent(), true);
+                $name = $data['name'] ?? null;
+                $quantity = $resource->getFinalQuantity();
+                /** @var \App\Entity\User $user */
+                $user = $this->getUser();
+        
+                $resourceStock = $resourceStockRepository->findByUserAndName($user, $name);
+                $finalQuantity = $resourceStock->getQuantity() + $quantity;
+        
+                $resourceStock->setQuantity($finalQuantity);
+                $entityManager->persist($resourceStock);
+                $resource->setCollectedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+                $resource->setIsCollected(true);
+                $resource->setIsCollectable(false);
+                $entityManager->persist($resource);
+                $entityManager->flush();
+        
+                return $this->json(
+                    [
+                        'collected' => true,
+                        // 'resourceStock' => $resourceStock,
+                        'collectedQuantity' => $quantity
+                    ],
+                    // Response::HTTP_OK,
+                    // [],
+                    // [
+                    //     'groups' => ['resource_stock:read'],
+                    // ]
+                );
+               } else {
+                    $resource->setIsCollectable(false);
+                    $entityManager->persist($resource);
+                    $entityManager->flush();
+                    return $this->json(
+                        [
+                            'collected' => false,
+                            // 'resourceStock' => $resourceStock,
+                            'collectedQuantity' => 0
+                        ],
+                    );
+               }
+        } else {
+            return $this->json(
+                [
+                    'collected' => false,
+                    // 'resourceStock' => $resourceStock,
+                    'collectedQuantity' => 0
+                ],
+                // Response::HTTP_OK,
+                // [],
+                // [
+                //     'groups' => ['resource_stock:read'],
+                // ]
+            );
+        }
     }
 
     #[Route('/gps/building/position/save', name: 'app_api_gps_building_position_save', methods: ["POST"])]

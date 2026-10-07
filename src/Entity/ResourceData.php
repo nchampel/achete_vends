@@ -41,6 +41,12 @@ class ResourceData
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Resource::class, orphanRemoval: true)]
     private Collection $resources;
 
+    #[ORM\Column]
+    private ?int $repopTime = null;
+
+    #[ORM\Column]
+    private ?int $collectableTime = null;
+
     public function __construct()
     {
         $this->resources = new ArrayCollection();
@@ -149,6 +155,30 @@ class ResourceData
                 $resource->setResource(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRepopTime(): ?int
+    {
+        return $this->repopTime;
+    }
+
+    public function setRepopTime(int $repopTime): static
+    {
+        $this->repopTime = $repopTime;
+
+        return $this;
+    }
+
+    public function getCollectableTime(): ?int
+    {
+        return $this->collectableTime;
+    }
+
+    public function setCollectableTime(int $collectableTime): static
+    {
+        $this->collectableTime = $collectableTime;
 
         return $this;
     }

@@ -60,6 +60,9 @@ class Resource
     #[ORM\Column]
     private ?int $finalQuantity = null;
 
+    #[ORM\Column]
+    private ?int $finalRepopTime = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -205,6 +208,18 @@ class Resource
     public function setFinalQuantity(int $finalQuantity): static
     {
         $this->finalQuantity = $finalQuantity;
+
+        return $this;
+    }
+
+    public function getFinalRepopTime(): ?int
+    {
+        return $this->finalRepopTime;
+    }
+
+    public function setFinalRepopTime(int $finalRepopTime): static
+    {
+        $this->finalRepopTime = $finalRepopTime;
 
         return $this;
     }

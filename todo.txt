@@ -1,29 +1,29 @@
-ok déplacer repo au contrôleur de world méthode unlockworld => fait, dans un service
-ok tester méthode => ok
-ok créer méthode dans stockitem pour créer les stock item au cron => fait, mais faut sécuriser avec app_token => fait
+  ok déplacer repo au contrôleur de world méthode unlockworld => fait, dans un service
+  ok tester méthode => ok
+  ok créer méthode dans stockitem pour créer les stock item au cron => fait, mais faut sécuriser avec app_token => fait
 acheter amélioration qui augmente quantité de stockitem à chaque réapprovisionnement => dans stockitemcontroller generateCron
-ok réapproviosennement toutes les 30 min
-ok créer fonction pour acheter article => à tester
+  ok réapproviosennement toutes les 30 min
+  ok créer fonction pour acheter article => à tester
 créer fonction pour mettre en vente article => test en cours, mais il faut intégrer achat prix voulu, vendre doit envoyer sur un formulaire où l'on voit prix conseillé, prix d'acaht, 
 et le prix qu'on peut entrer, défaut prix conseillé
-ok créer fonction pour vérifier si article va être acheté
+  ok créer fonction pour vérifier si article va être acheté
 NE PAS OUBLIER QUE SI USER SELL PRICE A 0, C EST QU AUCUN PRIX N A ETE RENTRE PAR L UTILISATEUR, mettre dans formualire achat le prix voulu de vente, éditable, 
 attention, utilisateur ne peut éditer que usersellprice
-faire maintenance (appcontroller de ibei)
-protéger les routes if (!$user) {
+  faire maintenance (appcontroller de ibei)
+  protéger les routes if (!$user) {
             return $this->redirectToRoute('app_login');
         }
-et les routes admin aussi => fait
+  et les routes admin aussi => fait
 
-mettre role_user où il faut dans twig, route. => protégé par security.yaml
-pour les achats, monde, remonter ceux de l'user => fait
+  mettre role_user où il faut dans twig, route. => protégé par security.yaml
+  pour les achats, monde, remonter ceux de l'user => fait
 
-tester achat et vente, modification prix, par appel insomnia app_stock_item_sell
+  tester achat et vente, modification prix, par appel insomnia app_stock_item_sell
 
 pharmaciemetrolarose.rh@gmail.com
 
-ok seule solution pour texte du bouton : donner liste caractères cinzel black et lui demander d'appliquer l'effet du bouton que chatgpt a généré, 
-apparement fournir le ttf (recherche ttf => analyser une police) et l'image du bouton
+  ok seule solution pour texte du bouton : donner liste caractères cinzel black et lui demander d'appliquer l'effet du bouton que chatgpt a généré, 
+  apparement fournir le ttf (recherche ttf => analyser une police) et l'image du bouton
 
 chaque jour on a droit de réclamer une petite somme de pièces
 monnaie écu
@@ -38,28 +38,28 @@ faire mdp oublié avec clef fournie par serveur
 
 récupérer ici la valeur de la quantité améliorée dans croncontroller
 
-ok register avec constante inscription à vérifier => fait
+  ok register avec constante inscription à vérifier => fait
 
-ok .env https://siextra.fr dans flutter => fait
+  ok .env https://siextra.fr dans flutter => fait
 
-ok sécuriser par rapport à chatgpt sécuriser route cron symfony route generate stock item (command) => ok
+  ok sécuriser par rapport à chatgpt sécuriser route cron symfony route generate stock item (command) => ok
 
 ex : php /home/o2demo/mon-application-sf/bin/console messenger:consume
 usr/local/bin/php bin/console app:generate-stock
 
 composer require symfony/lock pour command lock
 
-ok mettre en ligne, créer constant inscription, s'inscrire, me mettre admin après avoir testé un peu le jeu => ok
+  ok mettre en ligne, créer constant inscription, s'inscrire, me mettre admin après avoir testé un peu le jeu => ok
 
-ok vérifier qu'on met argent à 0 et monde à 1 lors inscription, => argent ok, voir le monde => ok
+  ok vérifier qu'on met argent à 0 et monde à 1 lors inscription, => argent ok, voir le monde => ok
 
-ok désactiver route old/test.php => fait
+  ok désactiver route old/test.php => fait
 
 alors j'ai pensé ramasser bois dans la forêt, 12 pour faire un tas de bois
 
 
-ok faire app_world_data_index (normalement que vérifier le lien)
-ok faire app_world_players_index faire le index et mettre user pseudo dans le tableau (comme stock-item)
+  ok faire app_world_data_index (normalement que vérifier le lien)
+  ok faire app_world_players_index faire le index et mettre user pseudo dans le tableau (comme stock-item)
 
 j'ai pensé faire construction ville, au début maison, ferme, puis carrière, puis caserne, puis mur, puis autre bâtiment militaires, puis château
 pas plusieurs villes, une seule, mais idée de débloquage d'autres marchandises car ville croît (avec bâtiment, arrivée de nouveaux villageois) => cf ia progression urbaine et conception jeu mobile
@@ -68,6 +68,7 @@ chaque jour : récupérer taxes, petits jeux sous forme de quêtes pour avoir de
 
 idée de collection d'objet luxueux qui augmentent les taxes ? => probabilité que ce soit vendu au marché
 
+synopsys 
 on commence on peut acheter tas de bois, fruits, et on peut les récolter
 tout cela peut être revendu après analyse qu'on fait soi même. si on analyse (qui prend 5 min) on ne peut pas faire autre chose (comme mini quête rapportant quelques pièces d'or)
 ensuite on peut vendre en fixant un prix, la réussite de la transaction dépend d'une probabilité et de la différence avec le prix trouvé par l'analyse
@@ -85,9 +86,9 @@ cf idée gameplay mobile, qui contient idée de simulation de 1000 joueurs sur 3
 
  #[Route('/generate/stock/item/{token}', name: 'app_stock_item_generate', methods: ['GET'])] à désactiver après vu Cathy
 
- ok faire boutons analyser et vendre
- ok faire 2e card stockitem, renommer la 1ere
- ok faire fonction analyse (temps + révélation du prix recommandé) => fonction en cours, entité mise à jour et migrée, mais pas en ligne
+   ok faire boutons analyser et vendre
+   ok faire 2e card stockitem, renommer la 1ere
+   ok faire fonction analyse (temps + révélation du prix recommandé) => fonction en cours, entité mise à jour et migrée, mais pas en ligne
  faire correction analysed, bouton + sur argent en flutter, analyseStartedAt à implémenter
  constante temps d'analyse, ou carrément table avec niveaux
 
@@ -100,7 +101,7 @@ en flutter, regarder comment à partir de l'appel cron mettre à jour flutter s'
 
 command dans .env
 
-ok commande achat en ligne => testé 
+  ok commande achat en ligne => testé 
 
 faire url dans item
 
@@ -115,9 +116,9 @@ faire limite 4 achats par dépôt article, rendre dépôt payant, avec taxe 5%, 
 
 paiement pour analyse, jusqu'à 10% du prix, à voir, calculer pour que ce ne soit pas rentable à chaque coup, jeter achat inventaire
 
-ok corriger bug attribution numéro, certainement ne comtpe pas ceux qui ont été vendu => apparement la fonction est bonne
+  ok corriger bug attribution numéro, certainement ne comtpe pas ceux qui ont été vendu => apparement la fonction est bonne
 
-ok corriger bug page admin user edit
+  ok corriger bug page admin user edit
 
 corriger design navbar en dynamique (mauvais affichage pour maman)
 
@@ -227,3 +228,20 @@ out tags geom;
 
 garder affichage radar des bâtiments, mettre les ressources qu'on a planté aussi (créer chmap dans resource pour faire la distinction), 
 et quand on est à portée du bâtiment, si on le sélectionne cela ouvre l'onglet correspondant (ex marché, inventaire ...)
+
+5/10
+
+vérifier lors récupération gpsaround que outdated marche bien 
+vérifier outdated dans app:repop
+
+6/10
+
+tester app:repop
+
+7/10
+
+test app:repop
+  ok périmée (peremption + final repop time)
+  ok pas périmée -
+  ok collectée pas repop
+  ok colelctée repop -

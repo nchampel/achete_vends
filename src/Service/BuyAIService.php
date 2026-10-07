@@ -40,16 +40,16 @@ class BuyAIService
             // on calcule le % positif ou négatif par rapport au prix conseillé
             $differencePercent = ($userSellPrice - $sellFinalPrice) * 100 / $sellFinalPrice;
             if($differencePercent <= -15){
-                $percent = 95;
+                $percent = 5;
             }
             if(-15 < $differencePercent && $differencePercent <= -10){
-                $percent = 90;
+                $percent = 95;
             }
             if(-10 < $differencePercent && $differencePercent <= -5){
-                $percent = 85;
+                $percent = 90;
             }
             if(-5 < $differencePercent && $differencePercent < 0){
-                $percent = 82;
+                $percent = 85;
             }
                             
             if($userSellPrice == $sellFinalPrice){
@@ -65,7 +65,7 @@ class BuyAIService
                 $percent = 40;
             }
             if(15 < $differencePercent){
-                $percent = 25;
+                $percent = 1;
             }
             // dump($percent);
 
