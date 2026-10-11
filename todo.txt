@@ -203,6 +203,8 @@ voir plus tard si je fais faire arbres plus fourni en fruit, idem osier
 
 02/10
 
+vitrolles
+
 coord génération ressources gps
 43.42633644578048, 5.279828224175385
 43.41393580098477, 5.281203607813426
@@ -245,3 +247,55 @@ test app:repop
   ok pas périmée -
   ok collectée pas repop
   ok colelctée repop -
+
+
+marseille
+
+
+coord génération ressources gps
+43.3399127, 5.4200979
+43.3320887, 5.4195767
+43.3325208, 5.4305630
+43.3372896, 5.4353161
+
+[out:json][timeout:60];
+
+(
+  way["highway"="footway"](43.3320887, 5.4195767, 43.3399127, 5.4305630);
+  way["highway"="path"](43.3320887, 5.4195767, 43.3399127, 5.4305630);
+  way["highway"="pedestrian"](43.3320887, 5.4195767, 43.3399127, 5.4305630);
+  way["highway"="living_street"](43.3320887, 5.4195767, 43.3399127, 5.4305630);
+  way["highway"="residential"](43.3320887, 5.4195767, 43.3399127, 5.4305630);
+  way["highway"="service"](43.3320887, 5.4195767, 43.3399127, 5.4305630);
+);
+
+out tags geom;
+
+femme auburn mêches brunes
+
+points à la main marseille
+43.3372214, 5.4254451
+43.3359629, 5.4259454
+43.3359705, 5.4271754
+
+8/10
+
+coord pour parking radar
+
+43.4558295, 5.2463115
+43.4851402, 5.3043897
+
+[out:json][timeout:60];
+
+(
+  way["highway"="footway"](43.4558295, 5.2463115, 43.4851402, 5.3043897);
+  way["highway"="path"](43.4558295, 5.2463115, 43.4851402, 5.3043897);
+  way["highway"="pedestrian"](43.4558295, 5.2463115, 43.4851402, 5.3043897);
+  way["highway"="living_street"](43.4558295, 5.2463115, 43.4851402, 5.3043897);
+  way["highway"="residential"](43.4558295, 5.2463115, 43.4851402, 5.3043897);
+  way["highway"="service"](43.4558295, 5.2463115, 43.4851402, 5.3043897);
+);
+
+out tags geom;
+
+google mymaps pour voir les points

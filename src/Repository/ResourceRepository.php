@@ -28,8 +28,8 @@ class ResourceRepository extends ServiceEntityRepository
    public function findResourcesAroundPlayer(array $position): array
    {
         // avant 0.01 pour 1km env
-        $longitude = 0.0025;
-        $latitude = 0.0018;
+        $longitude = 0.0013;
+        $latitude = 0.0009;
         return $this->createQueryBuilder('r')
            ->andWhere('r.isCollectable = true')
            ->andWhere('r.isCollected = false')

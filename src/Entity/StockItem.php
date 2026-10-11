@@ -73,6 +73,9 @@ class StockItem
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $pendingSaleAt = null;
 
+    #[ORM\Column]
+    private ?int $boughtAttempt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -266,6 +269,18 @@ class StockItem
     public function setPendingSaleAt(\DateTimeImmutable $pendingSaleAt): static
     {
         $this->pendingSaleAt = $pendingSaleAt;
+
+        return $this;
+    }
+
+    public function getBoughtAttempt(): ?int
+    {
+        return $this->boughtAttempt;
+    }
+
+    public function setBoughtAttempt(int $boughtAttempt): static
+    {
+        $this->boughtAttempt = $boughtAttempt;
 
         return $this;
     }
